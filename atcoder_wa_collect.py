@@ -158,6 +158,8 @@ def scrape_atcoder_submissions(session_key, task_id="d", target_count=30, contes
                     if sub_soup.pre and sub_soup.pre.string:
                         source_code = sub_soup.pre.string
 
+                        # ここコメントすればprint文フィルタ無効
+
                         # print文の数をカウント
                         print_count = count_print_statements(source_code)
                         print(f"ページ{page}-{i}: print文の数: {print_count}")
@@ -227,7 +229,7 @@ def scrape_atcoder_submissions(session_key, task_id="d", target_count=30, contes
 # メイン実行部分
 if __name__ == "__main__":
     # セッションキー（実際の値を入力してください）
-    # session_key = input("REVEL_SESSION のキーを入力してください: ").strip() or ""
+    session_key = input("REVEL_SESSION のキーを入力してください: ").strip() or ""
     # ユーザー入力でパラメータを指定
     task_id = input("タスクID を入力してください (例: d): ").strip() or "d"
     target_count = int(input("取得したいユーザー数を入力してください (例: 30): ").strip() or "30")
@@ -277,7 +279,9 @@ if __name__ == "__main__":
 # nが入力で受け付けてるから、for range(1,n+1)で回して確認すればok
 # setでもdictでも
 
-# 33 not ag
+
+# 33 not ag　これ答えの集め方次第でいい感じにクラスタリングできたの結果になりそう　TLEのデータも集計しよう
+
 # イルミネーションがHW個のLEDで構成されている
 # 2*2の領域で2つ以上点灯していたらアウト
 # LEDの最大個数
@@ -286,6 +290,18 @@ if __name__ == "__main__":
 # 偶数はh/2個
 # wも同様でh*wが答え
 
+
+
+# H, W = map(int, input().split())
+# if H == 1 or W == 1:
+#     print(max(H, W))
+# else:
+#     print(((H+1)//2)*((W+1)//2))
+
+
+
+# そもそもWAが少ないときはTLEかな？
+# https://atcoder.jp/contests/typical90/submissions?f.LanguageName=Python&f.Status=WA&f.Task=typical90_bc&f.User=&page=8
 # 55 select bc
 # n個の整数から5個選んだ積をPで割るとQ余る組み合わせ
 # 組み合わせをfor文で試す方法で行ける
@@ -298,11 +314,12 @@ if __name__ == "__main__":
 #                     if t==Q:
 #                         ans+=1
 
+
 # 61 deck bi
 # カード0枚から山札を作る
 # Q個操作tiを行う
 # ti=1:山札の一番上にカードを1枚追加
-# ti=2:山札の一番上のカードを1枚追加
+# ti=2:山札の一番下のカードを1枚追加
 # ti=3:山札の上からxi番目のカードを書き出す
 # ti=3printして出力して
 # リスト使って先頭末尾でもいいしスタックキューでもOK(dequeなら両方合わせもってる)

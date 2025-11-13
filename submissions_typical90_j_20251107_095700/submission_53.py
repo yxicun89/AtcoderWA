@@ -1,3 +1,5 @@
+# int16でオーバーフロー
+
 import sys
 import numpy as np
 
