@@ -229,7 +229,7 @@ def scrape_atcoder_submissions(session_key, task_id="d", target_count=30, contes
 # メイン実行部分
 if __name__ == "__main__":
     # セッションキー（実際の値を入力してください）
-    session_key = input("REVEL_SESSION のキーを入力してください: ").strip() or ""
+    session_key = "4d94e1022bc28ad2ae0872efe9546bf97e7d5cfe-%00_TS%3A1778762693%00%00SessionKey%3A4c83b65fb307cfc1afe85ee97ba44f286e4b53bb2d5a30936491ac53b9bdad95%00%00UserScreenName%3Aeclips%00%00UserName%3Aeclips%00%00a%3Afalse%00%00w%3Afalse%00%00csrf_token%3AhLW6wr%2F3AX2a9pKeZW3gjzBxU%2B6l%2BQxJZKRXPe1k4oY%3D%00"
     # ユーザー入力でパラメータを指定
     task_id = input("タスクID を入力してください (例: d): ").strip() or "d"
     target_count = int(input("取得したいユーザー数を入力してください (例: 30): ").strip() or "30")
@@ -346,3 +346,18 @@ if __name__ == "__main__":
 
 # 長さNの配列を用意し一つ一つの入力に対して大小関係を比較して増減を記録していく
 # 配列の1の数が条件を満たすからそれを数えれば良い
+
+# N, M = map(int, input().split())
+
+# # 各頂点の「自身より小さい頂点との隣接数」を記録する配列
+# smaller_count = [0] * N
+
+# for _ in range(M):
+#     a, b = map(int, input().split())
+#     if a > b:
+#         a, b = b, a  # a < b となるようにスワップ
+#     smaller_count[b - 1] += 1  # bにとって「小さい頂点a」との隣接を記録
+
+# # smaller_count[i] == 1 の頂点の数を数える
+# result = sum(1 for count in smaller_count if count == 1)
+# print(result)
