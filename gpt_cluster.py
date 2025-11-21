@@ -207,12 +207,14 @@ def organize_files_by_category(source_directory, categories, submission_labels):
 
     # カテゴリディレクトリを作成
     category_dirs = {}
+    category_file_counts = {}
     for key, value in categories.items():
         category_dir = os.path.join(output_directory, f"pattern_{key}_{value}")
         if not os.path.exists(category_dir):
             os.makedirs(category_dir)
             print(f"作成されたカテゴリディレクトリ: {category_dir}")
         category_dirs[key] = category_dir
+        category_file_counts[key] = 0
 
     # ファイルを仕分け
     for filename, category_id in submission_labels.items():
@@ -222,11 +224,25 @@ def organize_files_by_category(source_directory, categories, submission_labels):
             if category_id in category_dirs:
                 destination_file = os.path.join(category_dirs[category_id], f"{filename}.py")
                 shutil.copy2(source_file, destination_file)
+                category_file_counts[category_id] += 1
                 print(f"コピー完了: {source_file} -> {destination_file}")
             else:
                 print(f"警告: カテゴリID '{category_id}' が見つかりません - ファイル: {filename}")
         else:
             print(f"警告: ファイルが見つかりません - {source_file}")
+
+    # ディレクトリごとのファイル数を表示
+    print("\n" + "=" * 50)
+    print("カテゴリ別ファイル数統計")
+    print("=" * 50)
+    total_files = 0
+    for key, value in categories.items():
+        count = category_file_counts[key]
+        total_files += count
+        print(f"カテゴリ {key} ({value}): {count} ファイル")
+    
+    print("-" * 50)
+    print(f"合計: {total_files} ファイル")
 
 def main():
     """
