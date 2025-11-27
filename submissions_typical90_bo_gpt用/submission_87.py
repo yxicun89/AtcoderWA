@@ -1,4 +1,3 @@
-# 再帰でオーバーフロー
 
 def dec_to_numsystem_str(num, n_str):
 

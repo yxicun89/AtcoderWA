@@ -1,4 +1,3 @@
-# 再帰でスタックオーバーフローかも
 
 def base10int(value, base):
 

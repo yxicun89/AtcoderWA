@@ -1,4 +1,3 @@
-# 10進数表示してる
 
 n,k = map(int,input().split())
 

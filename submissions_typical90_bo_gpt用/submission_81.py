@@ -1,5 +1,4 @@
-# 変数を文字列として更新してエラー
-
+\
 n_base8, k = map(int, input().split())
 
 

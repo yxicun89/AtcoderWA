@@ -1,4 +1,3 @@
-# 再帰関数でオーバーフロー
 
 def LI(): return list(map(int, input().split()))
 

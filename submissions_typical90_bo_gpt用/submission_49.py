@@ -1,4 +1,3 @@
-# 変数を上書きして反映されていない
 
 def DecimalToNine(num):
 
