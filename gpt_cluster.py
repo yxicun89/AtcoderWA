@@ -264,13 +264,6 @@ ag_cluster_label = {
 # 最後に以下のカテゴリのどれに当たるか数字のみ出力してください。
 # 間違いの説明とカテゴリの出力のみ出力してください。
 
-# aa問題とag問題のカテゴリ定義（必要に応じて追加）
-aa_cluster_categories = {}
-aa_cluster_label = {}
-
-ag_cluster_categories = {}
-ag_cluster_label = {}
-
 # n個の整数から5個選び、それら整数の積をPで割るとQ余る組み合わせを求める問題
 
 # 1.全パターン検索しTLE
