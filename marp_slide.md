@@ -2,8 +2,6 @@
 marp: true
 theme: default
 paginate: true
-header: '修士論文発表 2025年度'
-footer: '競技プログラミングにおける誤答コードの自動分類手法'
 backgroundColor: #ffffff
 style: |
   /* 全体の設定 */
@@ -239,33 +237,33 @@ LLMによる教育的ヒント生成の効率化に向けて
 
 本研究では**2つの異なるアプローチ**で誤答の自動分類を試みる
 
-<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 30px;">
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 20px;">
 
 <div>
 
-### 手法1：静的解析アプローチ
+### 手法1：静的解析
 
-- 先行研究 **Asanas Cluster** をベースに実装
-- コードの**構造的特徴**を数値化
-- 機械学習で自動分類
-- **処理が高速**
+- Asanas Clusterベース
+- 構造的特徴を数値化
+- 機械学習で分類
+- 処理が高速
 
 </div>
 
 <div>
 
-### 手法2：LLMアプローチ
+### 手法2：LLM
 
-- **GPT-4o** を使用
-- コードの**意味**を理解して分類
-- 人間に近い判断が可能
-- **柔軟性が高い**
-
-</div>
+- GPT-4oを使用
+- 意味を理解して分類
+- 人間に近い判断
+- 柔軟性が高い
 
 </div>
 
-<div style="text-align: center; margin-top: 40px; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+</div>
+
+<div style="text-align: center; margin-top: 25px; padding: 12px; background: #f8f9fa; border-radius: 5px; font-size: 0.95em;">
 両手法の性能を比較し、実用的な誤答分類システムの実現可能性を検討
 </div>
 
@@ -273,17 +271,15 @@ LLMによる教育的ヒント生成の効率化に向けて
 
 ## 手法1の基本概念：プログラムをグラフで表現
 
-### なぜグラフで表現するのか？
+<div style="font-size: 0.9em;">
 
-プログラムの構造を**視覚的・数学的に分析**するため
+プログラムの構造を**視覚的・数学的に分析**するため、2種類のグラフを使用
 
-<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 25px;">
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
 
 <div>
 
 ### CFG（制御フローグラフ）
-
-**Control Flow Graph**
 
 プログラムの**実行の流れ**を表現
 
@@ -299,8 +295,6 @@ LLMによる教育的ヒント生成の効率化に向けて
 
 ### DFG（データフローグラフ）
 
-**Data Flow Graph**
-
 変数の**使われ方**を表現
 
 - 変数への代入
@@ -313,9 +307,11 @@ LLMによる教育的ヒント生成の効率化に向けて
 
 </div>
 
-<div style="margin-top: 25px; padding: 15px; background: #ecf5ff; border-left: 5px solid #3498db;">
+<div style="margin-top: 15px; padding: 10px; background: #ecf5ff; border-left: 5px solid #3498db;">
 
 💡 これらのグラフから数値的な特徴を抽出し、コードを比較・分類する
+
+</div>
 
 </div>
 
@@ -362,34 +358,28 @@ LLMによる教育的ヒント生成の効率化に向けて
 
 ### 機械学習による自動分類
 
-**k-means++アルゴリズム**を使用して、似た特徴を持つコードをグループ化
+**k-means++アルゴリズム**で似た特徴を持つコードをグループ化
 
-- **クラスタ数**: 16個
-  - 先行研究より、これ以上細かく分けても意味がないと判断
-- **類似度の計算**: ユークリッド距離を使用
-  - 他の方法と比較して最も良い結果（エラー指数 **0.0**）
+- **クラスタ数**: 16個（先行研究より設定）
+- **類似度**: ユークリッド距離を使用
 
 ### 重要度の調整（重み付け）
 
-どの特徴を重視するかを調整
-
 | 何を見るか | 重要度 | 理由 |
 |:---|:---:|:---|
-| プログラムの構造<br>（ループや条件分岐など） | **高い（1.0）** | コードの本質的な違いが現れる |
-| 変数の数 | **中程度（0.6）** | ある程度重要 |
-| 変数の読み書き回数 | **低い（0.1）** | 補助的な情報 |
+| プログラムの構造 | **高（1.0）** | 本質的な違いが現れる |
+| 変数の数 | **中（0.6）** | ある程度重要 |
+| 変数の読み書き回数 | **低（0.1）** | 補助的な情報 |
 
 ---
 
 ## 手法2：LLMアプローチとは？
 
-### LLM（大規模言語モデル）の強み
-
 **ChatGPT**などのAIを使って、コードの意味を理解させる
 
-<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 25px;">
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
 
-<div style="padding: 20px; background: #fff3cd; border-left: 5px solid #ffc107; border-radius: 5px;">
+<div style="padding: 15px; background: #fff3cd; border-left: 5px solid #ffc107; border-radius: 5px;">
 
 **手法1（静的解析）**
 
@@ -399,7 +389,7 @@ LLMによる教育的ヒント生成の効率化に向けて
 
 </div>
 
-<div style="padding: 20px; background: #d1ecf1; border-left: 5px solid #0c5460; border-radius: 5px;">
+<div style="padding: 15px; background: #d1ecf1; border-left: 5px solid #0c5460; border-radius: 5px;">
 
 **手法2（LLM）**
 
@@ -419,20 +409,16 @@ LLMによる教育的ヒント生成の効率化に向けて
 
 **GPT-4o** (OpenAI API)
 
-- システム化を見据え、**API経由で利用可能**な高性能モデルを選択
-- 今後のモデル改善により、さらなる精度・コスパ向上が期待できる
+- API経由で利用可能な高性能モデル
+- 今後のモデル改善で精度・コスパ向上が期待
 
 ### プロンプト設計の工夫
 
-<div class="box">
-
-1. **コスト削減**: 問題文は制約を省いた**要約版のみ**を提供
-2. **出力の制限**: 「間違いの説明」と「カテゴリ番号」のみに限定
+1. **コスト削減**: 問題文は要約版のみ提供
+2. **出力の制限**: 間違いの説明とカテゴリ番号のみ
 3. **カテゴリの明示**: 事前に人間が分類したカテゴリ名を与える
 
-</div>
-
-<div style="margin-top: 20px; padding: 15px; background: #ecf5ff; border-left: 5px solid #3498db;">
+<div style="margin-top: 15px; padding: 12px; background: #ecf5ff; border-left: 5px solid #3498db; font-size: 0.95em;">
 
 💡 LLMに「この誤答はどのカテゴリに属するか」を判定してもらう
 
@@ -472,13 +458,12 @@ n. [カテゴリnの説明]
 ### データセット
 
 - **対象**: 競プロ典型90問（★2難易度）の誤答コード
-- **正解ラベル**: 著者が手作業で理想的に分類したもの
-  - 例：「ループ範囲ミス」「計算式の誤り」「境界条件の誤り」など
-- LLMにはこのカテゴリ名を与えて判定させる
+- **正解ラベル**: 著者が手作業で分類
+  - 例：「ループ範囲ミス」「計算式の誤り」「境界条件の誤り」
 
-### 評価の方法：どちらが正確に分類できたか
+### 評価方法
 
-<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 20px;">
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px;">
 
 <div>
 
@@ -490,7 +475,7 @@ $$
 \text{Error Index} = \frac{n_{\text{total}} - n_{\text{max}}}{n_{\text{total}}}
 $$
 
-**意味**: 1つのグループに<br>異なる種類の誤答が<br>どれだけ混ざっているか
+1つのグループに異なる種類の<br>誤答がどれだけ混ざっているか
 
 </div>
 
@@ -500,7 +485,7 @@ $$
 
 正解との一致度を測定
 
-**意味**: 自動分類の結果が、<br>人間が分類した正解と<br>どれだけ一致しているか
+自動分類の結果が、人間が分類した<br>正解とどれだけ一致しているか
 
 → 高いほど精度が良い
 
@@ -512,28 +497,26 @@ $$
 
 ## 実験結果：手法1（静的解析）
 
-### 結果
-
 多くの問題で**期待した精度が得られなかった**
 
 ### 典型的な失敗パターン
 
 <div class="box">
 
-**問題点**: 論理的な間違い（アルゴリズムミス）が異なるコードでも、<br>コードの構造（if文やループの数など）が似ていると**同じクラスタに分類**されてしまう
+**問題点**: 論理的な間違いが異なるコードでも、構造（if文やループの数など）が似ていると**同じクラスタに分類**されてしまう
 
 </div>
 
-<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 25px;">
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
 
-<div style="padding: 15px; background: #fff3cd; border-left: 5px solid #ffc107; border-radius: 5px;">
+<div style="padding: 12px; background: #fff3cd; border-left: 5px solid #ffc107; border-radius: 5px;">
 
 **理想的な分類**<br>
-エラーの意味合いごとに<br>きれいに色分けされている
+エラーの意味合いごとに<br>きれいに色分け
 
 </div>
 
-<div style="padding: 15px; background: #f8d7da; border-left: 5px solid #dc3545; border-radius: 5px;">
+<div style="padding: 12px; background: #f8d7da; border-left: 5px solid #dc3545; border-radius: 5px;">
 
 **実際の分類結果**<br>
 異なる意味の誤答が<br>同じクラスタに混在
@@ -548,22 +531,17 @@ $$
 
 ### なぜうまくいかなかったのか
 
-<div class="box">
-
-静的解析は**コードの見た目（構造）**だけを見る<br>
-→ **間違いの本質（意味）** は分からない
-
-</div>
+静的解析は**コードの見た目（構造）**だけを見る → **間違いの本質（意味）**は分からない
 
 ### 具体例：構造が似ているが意味が異なる誤答
 
-<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
 
-<div style="padding: 15px; background: #ffe6e6; border-radius: 5px;">
+<div style="padding: 12px; background: #ffe6e6; border-radius: 5px;">
 
 **誤答A**
 ```
-for i in range(n-1):  # 範囲が1つ足りない
+for i in range(n-1):  # 範囲不足
     if a[i] > max:
         max = a[i]
 ```
@@ -571,12 +549,12 @@ for i in range(n-1):  # 範囲が1つ足りない
 
 </div>
 
-<div style="padding: 15px; background: #ffe6e6; border-radius: 5px;">
+<div style="padding: 12px; background: #ffe6e6; border-radius: 5px;">
 
 **誤答B**
 ```
 for i in range(n):
-    if a[i] >= max:  # 等号の位置が間違い
+    if a[i] >= max:  # 等号ミス
         max = a[i]
 ```
 → **条件判定のミス**
@@ -585,24 +563,17 @@ for i in range(n):
 
 </div>
 
-どちらも「for文1つ + if文1つ」→ **同じグループに分類されてしまう**
+どちらも「for文1つ + if文1つ」→ **同じグループに分類**
 
-### まとめ
-
-- 構造は似ているが、**間違いの種類は全く違う**
-- 意味的な分類には**別のアプローチが必要**
+構造は似ているが、**間違いの種類は全く違う** → 意味的な分類には**別のアプローチが必要**
 
 ---
 
 ## 実験結果：手法2（LLM）
 
-### 結果
-
 静的解析と比較して**良好な結果**が得られた
 
 ### 成功例
-
-<div class="box">
 
 ✅ 文法的には正しいがロジックが誤っているコード<br>
 ✅ 構造は似ているが意味が異なる誤答<br>
@@ -610,14 +581,12 @@ for i in range(n):
 
 これらを**正しく別のカテゴリに分類**することができた
 
-</div>
-
 ### 問題による違い
 
 - **うまくいった問題**: 論理的な誤りの種類が明確な問題
 - **課題が残る問題**: 誤答の境界が曖昧な問題
 
-<div style="text-align: center; margin-top: 25px; font-style: italic; color: #555;">
+<div style="text-align: center; margin-top: 20px; font-style: italic; color: #555; font-size: 0.95em;">
 現在、より多くのデータで詳細な評価を実施中
 </div>
 
