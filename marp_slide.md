@@ -6,8 +6,9 @@ backgroundColor: #ffffff
 style: |
   /* 全体の設定 */
   section {
-    font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
+    font-family: 'Meiryo', 'メイリオ', sans-serif;
     font-size: 26px;
+    font-weight: bold;
     padding: 60px 80px;
     color: #2c3e50;
     line-height: 1.7;
@@ -16,7 +17,7 @@ style: |
   /* H1: タイトルスライドの大見出し */
   h1 {
     color: #1a5490;
-    font-size: 2.0em;
+    font-size: 1.95em;
     font-weight: 700;
     border-bottom: none;
     margin-bottom: 0.5em;
@@ -30,7 +31,7 @@ style: |
     padding-left: 20px;
     padding-bottom: 8px;
     margin-bottom: 35px;
-    font-size: 1.5em;
+    font-size: 1.8em;
     font-weight: 600;
   }
 
@@ -50,7 +51,7 @@ style: |
     margin: 15px 0;
     padding-left: 30px;
   }
-  
+
   li {
     margin: 10px 0;
     line-height: 1.6;
@@ -63,7 +64,7 @@ style: |
     margin: 25px 0;
     font-size: 0.9em;
   }
-  
+
   th {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
@@ -72,7 +73,7 @@ style: |
     font-weight: 600;
     text-align: center;
   }
-  
+
   td {
     padding: 12px;
     border: 1px solid #ddd;
@@ -120,25 +121,35 @@ style: |
     margin: 20px 0;
     border-radius: 5px;
   }
+  .columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5px;
+  }
+  .col-right {
+    border-left: 2px solid #e0e0e0;
+    padding-left: 40px;
+  }
+  .author-name {
+    text-align: right;
+    /* emではなくpxで指定すると確実です。必要に応じて数字を大きくしてください */
+    font-size: 40px;
+    margin-top: 80px;
+    line-height: 1.5;
+    color: #1a5490; /* 文字色を明示したい場合 */
+    font-weight: bold; /* 太字にする設定 */
+  }
 ---
 
 <!-- _class: lead -->
 
 <div style="text-align: center; padding-top: 60px;">
 
-# 競技プログラミングにおける<br>誤答コードの自動分類手法の検討
+# プログラミング演習における誤答分類のための<br>構造的アプローチと意味的アプローチの比較評価
 
-<div style="font-size: 0.85em; color: #555; margin-top: 30px; font-weight: 500;">
-LLMによる教育的ヒント生成の効率化に向けて
+<div class="author-name">
+山本研究室 2024831008 西村優基
 </div>
-
-<div style="text-align: right; font-size: 0.95em; margin-top: 80px; line-height: 2.0;">
-
-**発表者**: [あなたの名前]
-
-**指導教員**: [先生の名前]
-
-**所属**: [大学・研究室名]
 
 </div>
 </div>
@@ -174,7 +185,6 @@ LLMによる教育的ヒント生成の効率化に向けて
 4. 各パターンに対応したプロンプトを設計
 
 → **1問あたり数時間～数日の作業**が必要
-
 </div>
 
 ### 問題点
@@ -243,10 +253,7 @@ LLMによる教育的ヒント生成の効率化に向けて
 
 ### 手法1：静的解析
 
-- Asanas Clusterベース
-- 構造的特徴を数値化
-- 機械学習で分類
-- 処理が高速
+- Asanas Clusterベース, 構造的特徴を数値化, 機械学習で分類, 処理が高速
 
 </div>
 
@@ -254,9 +261,7 @@ LLMによる教育的ヒント生成の効率化に向けて
 
 ### 手法2：LLM
 
-- GPT-4oを使用
-- 意味を理解して分類
-- 人間に近い判断
+- GPT-4oを使用, 意味を理解して分類, 人間に近い判断
 - 柔軟性が高い
 
 </div>
@@ -271,18 +276,13 @@ LLMによる教育的ヒント生成の効率化に向けて
 
 ## 手法1の基本概念：プログラムをグラフで表現
 
-<div style="font-size: 0.9em;">
-
 プログラムの構造を**視覚的・数学的に分析**するため、2種類のグラフを使用
-
-<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+<div class="columns">
 
 <div>
 
 ### CFG（制御フローグラフ）
-
 プログラムの**実行の流れ**を表現
-
 - 条件分岐（if文）
 - ループ（for/while文）
 - 処理の順序
@@ -291,12 +291,10 @@ LLMによる教育的ヒント生成の効率化に向けて
 
 </div>
 
-<div>
+<div class="col-right">
 
 ### DFG（データフローグラフ）
-
 変数の**使われ方**を表現
-
 - 変数への代入
 - 変数の参照
 - データの流れ
@@ -307,11 +305,17 @@ LLMによる教育的ヒント生成の効率化に向けて
 
 </div>
 
-<div style="margin-top: 15px; padding: 10px; background: #ecf5ff; border-left: 5px solid #3498db;">
+<div style="
+  position: absolute;
+  bottom: 50px;
+  left: 60px;
+  right: 60px;
+  padding: 12px;
+  background: #ecf5ff;
+  border-left: 5px solid #3498db;
+">
 
 💡 これらのグラフから数値的な特徴を抽出し、コードを比較・分類する
-
-</div>
 
 </div>
 
@@ -376,8 +380,7 @@ LLMによる教育的ヒント生成の効率化に向けて
 ## 手法2：LLMアプローチとは？
 
 **ChatGPT**などのAIを使って、コードの意味を理解させる
-
-<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+<div class="columns">
 
 <div style="padding: 15px; background: #fff3cd; border-left: 5px solid #ffc107; border-radius: 5px;">
 
@@ -467,7 +470,7 @@ n. [カテゴリnの説明]
 
 <div>
 
-**エラー指数**
+<!-- **エラー指数**
 
 グループの「純粋さ」を測定<br>（**0に近いほど良い**）
 
@@ -475,7 +478,7 @@ $$
 \text{Error Index} = \frac{n_{\text{total}} - n_{\text{max}}}{n_{\text{total}}}
 $$
 
-1つのグループに異なる種類の<br>誤答がどれだけ混ざっているか
+1つのグループに異なる種類の<br>誤答がどれだけ混ざっているか -->
 
 </div>
 
@@ -511,15 +514,15 @@ $$
 
 <div style="padding: 12px; background: #fff3cd; border-left: 5px solid #ffc107; border-radius: 5px;">
 
-**理想的な分類**<br>
-エラーの意味合いごとに<br>きれいに色分け
+**理想的な分類**
+エラーの意味合いごとにきれいに色分け
 
 </div>
 
 <div style="padding: 12px; background: #f8d7da; border-left: 5px solid #dc3545; border-radius: 5px;">
 
-**実際の分類結果**<br>
-異なる意味の誤答が<br>同じクラスタに混在
+**実際の分類結果**
+異なる意味の誤答が同じクラスタに混在
 
 </div>
 
@@ -539,7 +542,7 @@ $$
 
 <div style="padding: 12px; background: #ffe6e6; border-radius: 5px;">
 
-**誤答A**
+<!-- **誤答A**
 ```
 for i in range(n-1):  # 範囲不足
     if a[i] > max:
@@ -557,7 +560,7 @@ for i in range(n):
     if a[i] >= max:  # 等号ミス
         max = a[i]
 ```
-→ **条件判定のミス**
+→ **条件判定のミス** -->
 
 </div>
 
@@ -575,8 +578,8 @@ for i in range(n):
 
 ### 成功例
 
-✅ 文法的には正しいがロジックが誤っているコード<br>
-✅ 構造は似ているが意味が異なる誤答<br>
+✅ 文法的には正しいがロジックが誤っているコード
+✅ 構造は似ているが意味が異なる誤答
 ✅ 細かいアルゴリズムの違い
 
 これらを**正しく別のカテゴリに分類**することができた
@@ -639,7 +642,7 @@ LLMは**コードの意味合い**を汲み取ることができる
 
 **LLM**
 
-コードの意味を理解し、<br>**より正確な分類が可能**
+コードの意味を理解し、**より正確な分類が可能**
 
 </div>
 
@@ -658,8 +661,7 @@ LLMは**コードの意味合い**を汲み取ることができる
 ### 長期的な目標
 
 <div class="box">
-
-✨ **自動分類システムの実装**
+<!-- ✨ **自動分類システムの実装** -->
 
 - 誤答収集から分類までの完全自動化
 - 教員・TAの作業時間を大幅削減
