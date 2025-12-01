@@ -231,7 +231,9 @@ style: |
   .margin {
     margin-top: 30px;
   }
-
+  .margin-white {
+    margin-bottom: 70px;
+  }
   /* タイトルページ用のセンタリングコンテナ */
   .title-center {
     text-align: center;
@@ -780,7 +782,12 @@ def count_evens(numbers):
 
 ### 制御フローグラフ(CFG)
 
-![full cfg](cfg_count_evens.png)
+<div class = "margin-white"></div>
+
+![full cfg](white.png)
+
+<div class = "margin-white"></div>
+
 
 <div class = "box">
 
@@ -1561,14 +1568,3 @@ LLMは**コードの意味を理解**できるため,「誤答パターンの分
 <!-- <div class="footer-note-large">
 → 競技プログラミング教育の質と効率を向上させる基盤技術へ
 </div> -->
-
----
-
-<!-- _class: lead -->
-<!-- _paginate: false -->
-
-<div class="ending-message">
-
-ご清聴ありがとうございました
-
-</div>
