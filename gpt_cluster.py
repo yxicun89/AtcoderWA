@@ -1382,29 +1382,21 @@ def calculate_evaluation_metrics(correct_mapping, gpt_mapping):
     1. 適合率 (Precision) - GPT分類結果の正確さ
        - 定義: GPTが分類したファイルのうち、正しく分類された割合
        - 算出式: 正しく分類されたファイル数 / GPTが分類した総ファイル数
-       - 解釈: 高いほど「GPTが分類した結果は信頼できる」
 
     2. 再現率 (Recall) - 正解データの網羅性
        - 定義: 正解データのファイルのうち、GPTが正しく分類できた割合
        - 算出式: 正しく分類されたファイル数 / 正解データの総ファイル数
-       - 解釈: 高いほど「GPTは正解データを見逃さない」
 
-    3. F1スコア - 適合率と再現率の調和平均
+    3. F1値 - 適合率と再現率の調和平均
        - 定義: 適合率と再現率のバランスを示す総合指標
        - 算出式: 2 × (適合率 × 再現率) / (適合率 + 再現率)
-       - 解釈: 高いほど「バランスの取れた良い分類性能」
-
-    4. ノイズ率 (誤分類率) - 分類結果の品質
-       - 定義: GPTが分類したファイルのうち、間違って分類された割合
-       - 算出式: 間違って分類されたファイル数 / GPTが分類した総ファイル数
-       - 解釈: 低いほど「分類結果にノイズが少ない」
 
     Args:
         correct_mapping (dict): 正解のファイル名 -> カテゴリ名のマッピング
         gpt_mapping (dict): GPT分類のファイル名 -> カテゴリ名のマッピング
 
     Returns:
-        dict: 評価指標 (precision, recall, f1_score, noise_rate)
+        dict: 評価指標 (precision, recall, f1_score)
     """
     # 共通のファイル名を取得
     correct_files = set(correct_mapping.keys())
@@ -1413,17 +1405,10 @@ def calculate_evaluation_metrics(correct_mapping, gpt_mapping):
 
     # 正しく分類されたファイル数をカウント
     correct_classifications = 0
-    misclassified_files = []  # 間違って分類されたファイルの詳細
 
     for filename in common_files:
         if correct_mapping[filename] == gpt_mapping[filename]:
             correct_classifications += 1
-        else:
-            misclassified_files.append({
-                'file': filename,
-                'correct_category': correct_mapping[filename],
-                'gpt_category': gpt_mapping[filename]
-            })
 
     # 総ファイル数
     total_correct_files = len(correct_files)
@@ -1434,166 +1419,117 @@ def calculate_evaluation_metrics(correct_mapping, gpt_mapping):
     recall = correct_classifications / total_correct_files if total_correct_files > 0 else 0
     f1_score = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0
 
-    # ノイズ率の計算（間違って分類されたファイルの割合）
-    noise_rate = len(misclassified_files) / total_gpt_files if total_gpt_files > 0 else 0
-
-    # エラー指数の計算
-    # Error Index = (n_total - n_max) / n_total
-    # n_total: 誤答総数, n_max: 最多カテゴリの誤答数
-    error_index = 0
-    max_error_category = None
-    max_error_count = 0
-
-    if len(misclassified_files) > 0:
-        # カテゴリごとの誤答数をカウント
-        error_by_category = {}
-        for item in misclassified_files:
-            gpt_cat = item['gpt_category']
-            if gpt_cat not in error_by_category:
-                error_by_category[gpt_cat] = 0
-            error_by_category[gpt_cat] += 1
-
-        n_total = len(misclassified_files)  # 誤答総数
-        n_max = max(error_by_category.values()) if error_by_category else 0  # 最多カテゴリの誤答数
-        error_index = (n_total - n_max) / n_total if n_total > 0 else 0
-
-        # 最多エラーカテゴリを特定
-        if error_by_category:
-            max_error_category = max(error_by_category, key=error_by_category.get)
-            max_error_count = error_by_category[max_error_category]
-
-    # 結果を表示
+    # カテゴリ分布を計算
     print("\n" + "=" * 60)
-    print("評価指標")
+    print("カテゴリ分布")
+    print("=" * 60)
+
+    # 正解データのカテゴリ分布
+    correct_distribution = {}
+    for category in correct_mapping.values():
+        correct_distribution[category] = correct_distribution.get(category, 0) + 1
+
+    # GPT分類のカテゴリ分布
+    gpt_distribution = {}
+    for category in gpt_mapping.values():
+        gpt_distribution[category] = gpt_distribution.get(category, 0) + 1
+
+    print("正解データの分布:")
+    for category in sorted(correct_distribution.keys()):
+        count = correct_distribution[category]
+        print(f"  {category}: {count}")
+
+    print("\nGPT分類の分布:")
+    for category in sorted(gpt_distribution.keys()):
+        count = gpt_distribution[category]
+        print(f"  {category}: {count}")
+
+    # GPT分類の各カテゴリの正解分類分布を表示
+    print("\nGPT分類の詳細分布（正解分類内訳）:")
+    for gpt_category in sorted(gpt_distribution.keys()):
+        # このGPTカテゴリに分類されたファイルの正解カテゴリを集計
+        correct_category_distribution = {}
+        for file, category in gpt_mapping.items():
+            if category == gpt_category and file in correct_mapping:
+                actual_category = correct_mapping[file]
+                if actual_category not in correct_category_distribution:
+                    correct_category_distribution[actual_category] = 0
+                correct_category_distribution[actual_category] += 1
+
+        if correct_category_distribution:
+            distribution_str = ",".join([f"{cat}:{count}" for cat, count in sorted(correct_category_distribution.items())])
+            print(f"  {gpt_category}{gpt_distribution[gpt_category]}({distribution_str})")
+        else:
+            print(f"  {gpt_category}{gpt_distribution[gpt_category]}(正解データなし)")
+
+    print("=" * 60)
+
+    # カテゴリごとの評価指標を計算
+    print("\n" + "=" * 60)
+    print("カテゴリごとの評価指標")
+    print("=" * 60)
+
+    # 全てのカテゴリを取得
+    all_categories = set(correct_mapping.values()) | set(gpt_mapping.values())
+
+    print(f"{'カテゴリ名':<20} | {'正解':>4} | {'GPT':>4} | {'正分類':>4} | {'適合率':>7} | {'再現率':>7} | {'F1値':>7}")
+    print("-" * 85)
+
+    category_metrics = {}
+    for category in sorted(all_categories):
+        # このカテゴリの正解ファイル
+        correct_files_in_category = [f for f, c in correct_mapping.items() if c == category]
+        # このカテゴリにGPTが分類したファイル
+        gpt_files_in_category = [f for f, c in gpt_mapping.items() if c == category]
+
+        # このカテゴリで正しく分類されたファイル（両方に含まれるファイル）
+        correctly_classified_in_category = len([
+            f for f in correct_files_in_category
+            if f in gpt_mapping and gpt_mapping[f] == category
+        ])
+
+        correct_count = len(correct_files_in_category)
+        gpt_count = len(gpt_files_in_category)
+
+        # カテゴリごとの適合率、再現率、F1値を計算
+        category_precision = correctly_classified_in_category / gpt_count if gpt_count > 0 else 0
+        category_recall = correctly_classified_in_category / correct_count if correct_count > 0 else 0
+        category_f1 = 2 * (category_precision * category_recall) / (category_precision + category_recall) if (category_precision + category_recall) > 0 else 0
+
+        # 結果を保存
+        category_metrics[category] = {
+            'precision': category_precision,
+            'recall': category_recall,
+            'f1_score': category_f1,
+            'correct_count': correct_count,
+            'gpt_count': gpt_count,
+            'correctly_classified': correctly_classified_in_category
+        }
+
+        # 結果を表示
+        print(f"{category:<20} | {correct_count:>4} | {gpt_count:>4} | {correctly_classified_in_category:>4} | {category_precision*100:>6.1f}% | {category_recall*100:>6.1f}% | {category_f1*100:>6.1f}%")
+
+    print("=" * 85)
+
+    # 全体の結果を表示
+    print("\n" + "=" * 60)
+    print("全体の評価指標")
     print("=" * 60)
     print(f"正解データの総ファイル数: {total_correct_files}")
     print(f"GPT分類の総ファイル数: {total_gpt_files}")
     print(f"共通ファイル数: {len(common_files)}")
     print(f"正しく分類されたファイル数: {correct_classifications}")
-    print(f"間違って分類されたファイル数: {len(misclassified_files)}")
     print("-" * 60)
     print(f"適合率 (Precision): {precision:.4f} ({precision*100:.2f}%)")
     print(f"再現率 (Recall): {recall:.4f} ({recall*100:.2f}%)")
-    print(f"F1スコア: {f1_score:.4f} ({f1_score*100:.2f}%)")
-    print(f"ノイズ率 (誤分類率): {noise_rate:.4f} ({noise_rate*100:.2f}%)")
+    print(f"F1値: {f1_score:.4f} ({f1_score*100:.2f}%)")
     print("=" * 60)
-
-    # カテゴリごとの詳細を表示
-    print("\nカテゴリごとの詳細:")
-    print("-" * 60)
-
-    # 正解データのカテゴリを取得
-    correct_categories = set(correct_mapping.values())
-
-    for category in sorted(correct_categories):
-        correct_in_category = [f for f, c in correct_mapping.items() if c == category]
-        gpt_in_category = [f for f, c in gpt_mapping.items() if c == category]
-
-        correct_count = len(correct_in_category)
-        gpt_count = len(gpt_in_category)
-
-        # このカテゴリで正しく分類されたファイル数
-        correctly_classified_in_category = len(
-            [f for f in correct_in_category if f in gpt_mapping and gpt_mapping[f] == category]
-        )
-
-        # このカテゴリに間違って分類されたファイル（ノイズ）
-        noise_in_category = [
-            f for f in gpt_in_category
-            if f in correct_mapping and correct_mapping[f] != category
-        ]
-
-        category_precision = correctly_classified_in_category / gpt_count if gpt_count > 0 else 0
-        category_recall = correctly_classified_in_category / correct_count if correct_count > 0 else 0
-        category_noise_rate = len(noise_in_category) / gpt_count if gpt_count > 0 else 0
-
-        # カテゴリごとのエラー指数計算
-        # GPTがこのカテゴリに分類したファイルを正解カテゴリ別に分析
-        category_error_index = 0
-        if gpt_count > 0:
-            # GPTがこのカテゴリに分類したファイルの正解カテゴリをカウント
-            correct_category_distribution = {}
-            for f in gpt_in_category:
-                if f in correct_mapping:
-                    actual_category = correct_mapping[f]
-                    if actual_category not in correct_category_distribution:
-                        correct_category_distribution[actual_category] = 0
-                    correct_category_distribution[actual_category] += 1
-
-            if correct_category_distribution:
-                n_total = gpt_count  # GPTが分類したそのカテゴリのファイル数
-                n_max = max(correct_category_distribution.values())  # その分類の中で最多カテゴリファイル数
-                category_error_index = (n_total - n_max) / n_total if n_total > 0 else 0
-
-        print(f"\n{category}:")
-        print(f"  正解データ: {correct_count} ファイル")
-        print(f"  GPT分類: {gpt_count} ファイル")
-        print(f"  正しく分類: {correctly_classified_in_category} ファイル")
-        print(f"  ノイズ（誤分類）: {len(noise_in_category)} ファイル")
-        print(f"  適合率: {category_precision:.4f} ({category_precision*100:.2f}%)")
-        print(f"  再現率: {category_recall:.4f} ({category_recall*100:.2f}%)")
-        print(f"  ノイズ率: {category_noise_rate:.4f} ({category_noise_rate*100:.2f}%)")
-        print(f"  エラー指数: {category_error_index:.4f} ({category_error_index*100:.2f}%)")
-
-        if noise_in_category:
-            print(f"  ノイズファイル詳細:")
-            for noise_file in sorted(noise_in_category):
-                actual_category = correct_mapping[noise_file]
-                print(f"    - {noise_file}: 正解='{actual_category}' → GPT='{category}'")
-
-    # 間違って分類されたファイルの詳細分析
-    if misclassified_files:
-        print("\n" + "=" * 60)
-        print("誤分類ファイルの詳細分析")
-        print("=" * 60)
-
-        # カテゴリ間の混同行列のような情報
-        confusion_data = {}
-        for item in misclassified_files:
-            correct_cat = item['correct_category']
-            gpt_cat = item['gpt_category']
-            key = f"{correct_cat} → {gpt_cat}"
-
-            if key not in confusion_data:
-                confusion_data[key] = []
-            confusion_data[key].append(item['file'])
-
-        print("誤分類パターン:")
-        for pattern, files in sorted(confusion_data.items()):
-            print(f"\n{pattern}: {len(files)} ファイル")
-            for file in sorted(files[:5]):  # 最初の5個を表示
-                print(f"  - {file}")
-            if len(files) > 5:
-                print(f"  ... 他{len(files)-5}個")
-
-        # 見逃されたファイル（正解データにあるがGPTで分類されていない）
-        missed_files = correct_files - gpt_files
-        if missed_files:
-            print(f"\n見逃されたファイル: {len(missed_files)} 個")
-            missed_by_category = {}
-            for file in missed_files:
-                category = correct_mapping[file]
-                if category not in missed_by_category:
-                    missed_by_category[category] = []
-                missed_by_category[category].append(file)
-
-            for category, files in sorted(missed_by_category.items()):
-                print(f"  {category}: {len(files)} ファイル")
-                for file in sorted(files[:3]):
-                    print(f"    - {file}")
-                if len(files) > 3:
-                    print(f"    ... 他{len(files)-3}個")
 
     return {
         'precision': precision,
         'recall': recall,
         'f1_score': f1_score,
-        'noise_rate': noise_rate,
-        'error_index': error_index,
-        'correct_classifications': correct_classifications,
-        'misclassified_files': len(misclassified_files),
-        'total_correct_files': total_correct_files,
-        'total_gpt_files': total_gpt_files
+        'category_metrics': category_metrics
     }
 
 
