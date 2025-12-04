@@ -30,10 +30,10 @@
 
 aa_cluster_categories = {
     "1": "ハッシュ衝突",
-    "2": "二分探索関連の間違い",
-    "3": "出力位置間違い",
-    "4": "名簿管理での間違い",
-    "5": "重複チェックでの間違い"
+    "2": "二分探索関連ミス",
+    "3": "出力間違い",
+    "4": "名簿管理ミス",
+    "5": "重複チェックミス"
 }
 
 aa_cluster_label = {
@@ -152,8 +152,8 @@ aa_cluster_label = {
 
 
 ag_cluster_categories = {
-    "1": "探索し点灯個数をカウントしTLE",
-    "2": "考慮漏れによる間違い"
+    "1": "探索し点灯個数をカウント",
+    "2": "考慮漏れミス"
 }
 
 
@@ -273,10 +273,10 @@ ag_cluster_label = {
 # 5.計算方法はあってるけど剰余計算のところで何かしらエラー
 
 bc_cluster_categories = {
-    "1": "全パターン検索しTLE",
-    "2": "組み合わせはいいけど計算が何かしら間違っている",
-    "3": "組み合わせ作成や選択間違い",
-    "4": "計算以外の条件確認間違い",
+    "1": "全パターン検索",
+    "2": "組み合わせはいいけど計算方法が何かしら間違ってる",
+    "3": "組み合わせ作成や選択ミス",
+    "4": "計算以外の条件確認ミス",
     "5": "計算方法はあってるけど剰余計算のところで何かしらエラー"
 }
 
@@ -487,8 +487,8 @@ bi_cluster_label = {
 # 4.進数変換処理中にエラー
 
 bo_cluster_categories = {
-    "1": "N=0の処理漏れ",
-    "2": "再帰して計算エラー",
+    "1": "n=0の処理漏れ",
+    "2": "再帰",
     "3": "出力間違い",
     "4": "進数変換処理中にエラー"
 
@@ -610,9 +610,9 @@ bo_cluster_label = {
 # 3.隣接している配列作成に関する間違い
 
 bz_cluster_categories = {
-    "1": "グラフ作って探索しTLE",
+    "1": "グラフ作ってTLE",
     "2": "ちょうど1個のカウント条件に関する間違い",
-    "3": "隣接している配列作成に関する間違い"
+    "3": "隣接条件のカウントミス"
 }
 
 bz_cluster_label = {
@@ -731,8 +731,8 @@ bz_cluster_label = {
 # 4.累積和使用しているけど計算方法間違い
 
 d_cluster_categories = {
-    "1": "出力のインデックス間違い",
-    "2": "累積和作成で間違い",
+    "1": "出力のインデックスミス",
+    "2": "累積和作成でミス",
     "3": "累積和使用していない",
     "4": "累積和使用しているけど計算方法間違い"
 }
@@ -855,10 +855,10 @@ d_cluster_label = {
 # 5.結果の計算間違い
 
 j_cluster_categories = {
-    "1": "インデックス以外のクエリ処理での間違い",
-    "2": "クエリ処理時のインデックス処理での間違い",
-    "3": "累積和作成での間違い",
-    "4": "累積和使っていない",
+    "1": "インデックス以外のクエリ処理ミス",
+    "2": "クエリ処理時のインデックス処理間違い",
+    "3": "累積和作成ミス",
+    "4": "累積和使ってない",
     "5": "結果の計算間違い"
 }
 
@@ -987,9 +987,9 @@ j_cluster_label = {
 
 v_cluster_categories = {
     "1": "最大公約数算出間違い",
-    "2": "浮動小数誤差による計算誤差",
-    "3": "最大公約数を使用しない最小回数算出間違い",
-    "4": "最大公約数を使用した最小回数算出間違い"
+    "2": "浮動小数誤差",
+    "3": "最大公約数を使用しない回数算出間違い",
+    "4": "最小回数算出間違い"
 }
 
 v_cluster_label = {
@@ -1111,8 +1111,8 @@ v_cluster_label = {
 
 x_cluster_categories = {
     "1": "判定条件漏れ",
-    "2": "判定条件漏れ以外の条件に関する間違い",
-    "3": "差分の計算間違い"
+    "2": "判定条件漏れ以外の条件間違い",
+    "3": "差分の計算ミス"
 }
 
 x_cluster_label = {
@@ -1219,61 +1219,77 @@ x_cluster_label = {
 }
 
 import os
-import shutil
 
-def organize_files_by_category(source_directory, categories, submission_labels):
+def classify_files_by_category(source_directory, categories, submission_labels):
     """
-    指定されたディレクトリのファイルをカテゴリごとに仕分けする
+    指定されたディレクトリのファイルをカテゴリごとに分類し、結果を辞書で返す
 
     Args:
         source_directory (str): 元のディレクトリパス
         categories (dict): カテゴリの辞書（key: カテゴリ番号, value: カテゴリ名）
         submission_labels (dict): ファイルとカテゴリの対応（key: ファイル名（.py無し）, value: カテゴリ番号）
-    """
-    # 出力ディレクトリを作成
-    output_directory = source_directory + "_gpt_cluster"
-    if not os.path.exists(output_directory):
-        os.makedirs(output_directory)
-        print(f"作成されたディレクトリ: {output_directory}")
 
-    # カテゴリディレクトリを作成
-    category_dirs = {}
+    Returns:
+        dict: カテゴリごとのファイルリストと統計情報
+    """
+    # カテゴリごとのファイルリストを初期化
+    classification_result = {}
     category_file_counts = {}
+
     for key, value in categories.items():
-        category_dir = os.path.join(output_directory, f"pattern_{key}_{value}")
-        if not os.path.exists(category_dir):
-            os.makedirs(category_dir)
-            print(f"作成されたカテゴリディレクトリ: {category_dir}")
-        category_dirs[key] = category_dir
+        classification_result[value] = []  # pattern_プレフィックスを除去して、カテゴリ名をそのまま使用
         category_file_counts[key] = 0
 
-    # ファイルを仕分け
+    # ファイルを分類
+    missing_files = []
+    invalid_categories = []
+
     for filename, category_id in submission_labels.items():
         source_file = os.path.join(source_directory, f"{filename}.py")
 
         if os.path.exists(source_file):
-            if category_id in category_dirs:
-                destination_file = os.path.join(category_dirs[category_id], f"{filename}.py")
-                shutil.copy2(source_file, destination_file)
+            if category_id in categories:
+                category_name = categories[category_id]  # カテゴリ名をそのまま使用
+                classification_result[category_name].append(f"{filename}.py")
                 category_file_counts[category_id] += 1
-                print(f"コピー完了: {source_file} -> {destination_file}")
             else:
-                print(f"警告: カテゴリID '{category_id}' が見つかりません - ファイル: {filename}")
+                invalid_categories.append((filename, category_id))
         else:
-            print(f"警告: ファイルが見つかりません - {source_file}")
+            missing_files.append(filename)
 
-    # ディレクトリごとのファイル数を表示
+    # 結果を表示
     print("\n" + "=" * 50)
-    print("カテゴリ別ファイル数統計")
+    print("カテゴリ別ファイル分類結果")
     print("=" * 50)
+
     total_files = 0
     for key, value in categories.items():
-        count = category_file_counts[key]
+        category_name = value  # カテゴリ名をそのまま使用
+        file_list = classification_result[category_name]
+        count = len(file_list)
         total_files += count
-        print(f"カテゴリ {key} ({value}): {count} ファイル")
 
-    print("-" * 50)
+        print(f"\nカテゴリ {key} ({value}): {count} ファイル")
+        if file_list:
+            for file in sorted(file_list):
+                print(f"  - {file}")
+
+    # 警告メッセージ
+    if missing_files:
+        print(f"\n警告: 以下のファイルが見つかりません:")
+        for filename in missing_files:
+            print(f"  - {filename}.py")
+
+    if invalid_categories:
+        print(f"\n警告: 以下のファイルのカテゴリIDが無効です:")
+        for filename, category_id in invalid_categories:
+            print(f"  - {filename}: カテゴリID '{category_id}'")
+
+    print("\n" + "-" * 50)
     print(f"合計: {total_files} ファイル")
+    print("=" * 50)
+
+    return classification_result
 
 def collect_correct_classifications(correct_directory):
     """
@@ -1305,9 +1321,31 @@ def collect_correct_classifications(correct_directory):
     return correct_mapping
 
 
+def convert_classification_result_to_mapping(classification_result):
+    """
+    分類結果辞書をファイル名 -> カテゴリ名のマッピングに変換
+
+    Args:
+        classification_result (dict): カテゴリ名 -> ファイルリストの辞書
+
+    Returns:
+        dict: ファイル名 (拡張子なし) -> カテゴリ名 のマッピング
+    """
+    gpt_mapping = {}
+
+    for category_name, file_list in classification_result.items():
+        # カテゴリ名はそのまま使用（pattern_プレフィックスの処理は不要）
+        for filename in file_list:
+            if filename.endswith('.py'):
+                file_base = filename[:-3]  # .pyを除去
+                gpt_mapping[file_base] = category_name
+
+    return gpt_mapping
+
 def collect_gpt_classifications(gpt_cluster_directory):
     """
     GPT分類結果のディレクトリから、ファイル名とカテゴリのマッピングを収集
+    （この関数は後方互換性のために残しているが、今回は使用されない）
 
     Args:
         gpt_cluster_directory (str): GPT分類結果のディレクトリパス (例: submissions_typical90_x_gpt_cluster)
@@ -1339,12 +1377,34 @@ def calculate_evaluation_metrics(correct_mapping, gpt_mapping):
     """
     正解データとGPT分類結果を比較して評価指標を計算
 
+    評価指標の説明:
+
+    1. 適合率 (Precision) - GPT分類結果の正確さ
+       - 定義: GPTが分類したファイルのうち、正しく分類された割合
+       - 算出式: 正しく分類されたファイル数 / GPTが分類した総ファイル数
+       - 解釈: 高いほど「GPTが分類した結果は信頼できる」
+
+    2. 再現率 (Recall) - 正解データの網羅性
+       - 定義: 正解データのファイルのうち、GPTが正しく分類できた割合
+       - 算出式: 正しく分類されたファイル数 / 正解データの総ファイル数
+       - 解釈: 高いほど「GPTは正解データを見逃さない」
+
+    3. F1スコア - 適合率と再現率の調和平均
+       - 定義: 適合率と再現率のバランスを示す総合指標
+       - 算出式: 2 × (適合率 × 再現率) / (適合率 + 再現率)
+       - 解釈: 高いほど「バランスの取れた良い分類性能」
+
+    4. ノイズ率 (誤分類率) - 分類結果の品質
+       - 定義: GPTが分類したファイルのうち、間違って分類された割合
+       - 算出式: 間違って分類されたファイル数 / GPTが分類した総ファイル数
+       - 解釈: 低いほど「分類結果にノイズが少ない」
+
     Args:
         correct_mapping (dict): 正解のファイル名 -> カテゴリ名のマッピング
         gpt_mapping (dict): GPT分類のファイル名 -> カテゴリ名のマッピング
 
     Returns:
-        dict: 評価指標 (precision, recall, f1_score)
+        dict: 評価指標 (precision, recall, f1_score, noise_rate)
     """
     # 共通のファイル名を取得
     correct_files = set(correct_mapping.keys())
@@ -1353,9 +1413,17 @@ def calculate_evaluation_metrics(correct_mapping, gpt_mapping):
 
     # 正しく分類されたファイル数をカウント
     correct_classifications = 0
+    misclassified_files = []  # 間違って分類されたファイルの詳細
+
     for filename in common_files:
         if correct_mapping[filename] == gpt_mapping[filename]:
             correct_classifications += 1
+        else:
+            misclassified_files.append({
+                'file': filename,
+                'correct_category': correct_mapping[filename],
+                'gpt_category': gpt_mapping[filename]
+            })
 
     # 総ファイル数
     total_correct_files = len(correct_files)
@@ -1366,6 +1434,34 @@ def calculate_evaluation_metrics(correct_mapping, gpt_mapping):
     recall = correct_classifications / total_correct_files if total_correct_files > 0 else 0
     f1_score = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0
 
+    # ノイズ率の計算（間違って分類されたファイルの割合）
+    noise_rate = len(misclassified_files) / total_gpt_files if total_gpt_files > 0 else 0
+
+    # エラー指数の計算
+    # Error Index = (n_total - n_max) / n_total
+    # n_total: 誤答総数, n_max: 最多カテゴリの誤答数
+    error_index = 0
+    max_error_category = None
+    max_error_count = 0
+
+    if len(misclassified_files) > 0:
+        # カテゴリごとの誤答数をカウント
+        error_by_category = {}
+        for item in misclassified_files:
+            gpt_cat = item['gpt_category']
+            if gpt_cat not in error_by_category:
+                error_by_category[gpt_cat] = 0
+            error_by_category[gpt_cat] += 1
+
+        n_total = len(misclassified_files)  # 誤答総数
+        n_max = max(error_by_category.values()) if error_by_category else 0  # 最多カテゴリの誤答数
+        error_index = (n_total - n_max) / n_total if n_total > 0 else 0
+
+        # 最多エラーカテゴリを特定
+        if error_by_category:
+            max_error_category = max(error_by_category, key=error_by_category.get)
+            max_error_count = error_by_category[max_error_category]
+
     # 結果を表示
     print("\n" + "=" * 60)
     print("評価指標")
@@ -1374,10 +1470,12 @@ def calculate_evaluation_metrics(correct_mapping, gpt_mapping):
     print(f"GPT分類の総ファイル数: {total_gpt_files}")
     print(f"共通ファイル数: {len(common_files)}")
     print(f"正しく分類されたファイル数: {correct_classifications}")
+    print(f"間違って分類されたファイル数: {len(misclassified_files)}")
     print("-" * 60)
     print(f"適合率 (Precision): {precision:.4f} ({precision*100:.2f}%)")
     print(f"再現率 (Recall): {recall:.4f} ({recall*100:.2f}%)")
     print(f"F1スコア: {f1_score:.4f} ({f1_score*100:.2f}%)")
+    print(f"ノイズ率 (誤分類率): {noise_rate:.4f} ({noise_rate*100:.2f}%)")
     print("=" * 60)
 
     # カテゴリごとの詳細を表示
@@ -1399,21 +1497,101 @@ def calculate_evaluation_metrics(correct_mapping, gpt_mapping):
             [f for f in correct_in_category if f in gpt_mapping and gpt_mapping[f] == category]
         )
 
+        # このカテゴリに間違って分類されたファイル（ノイズ）
+        noise_in_category = [
+            f for f in gpt_in_category
+            if f in correct_mapping and correct_mapping[f] != category
+        ]
+
         category_precision = correctly_classified_in_category / gpt_count if gpt_count > 0 else 0
         category_recall = correctly_classified_in_category / correct_count if correct_count > 0 else 0
+        category_noise_rate = len(noise_in_category) / gpt_count if gpt_count > 0 else 0
+
+        # カテゴリごとのエラー指数計算
+        # GPTがこのカテゴリに分類したファイルを正解カテゴリ別に分析
+        category_error_index = 0
+        if gpt_count > 0:
+            # GPTがこのカテゴリに分類したファイルの正解カテゴリをカウント
+            correct_category_distribution = {}
+            for f in gpt_in_category:
+                if f in correct_mapping:
+                    actual_category = correct_mapping[f]
+                    if actual_category not in correct_category_distribution:
+                        correct_category_distribution[actual_category] = 0
+                    correct_category_distribution[actual_category] += 1
+
+            if correct_category_distribution:
+                n_total = gpt_count  # GPTが分類したそのカテゴリのファイル数
+                n_max = max(correct_category_distribution.values())  # その分類の中で最多カテゴリファイル数
+                category_error_index = (n_total - n_max) / n_total if n_total > 0 else 0
 
         print(f"\n{category}:")
         print(f"  正解データ: {correct_count} ファイル")
         print(f"  GPT分類: {gpt_count} ファイル")
         print(f"  正しく分類: {correctly_classified_in_category} ファイル")
+        print(f"  ノイズ（誤分類）: {len(noise_in_category)} ファイル")
         print(f"  適合率: {category_precision:.4f} ({category_precision*100:.2f}%)")
         print(f"  再現率: {category_recall:.4f} ({category_recall*100:.2f}%)")
+        print(f"  ノイズ率: {category_noise_rate:.4f} ({category_noise_rate*100:.2f}%)")
+        print(f"  エラー指数: {category_error_index:.4f} ({category_error_index*100:.2f}%)")
+
+        if noise_in_category:
+            print(f"  ノイズファイル詳細:")
+            for noise_file in sorted(noise_in_category):
+                actual_category = correct_mapping[noise_file]
+                print(f"    - {noise_file}: 正解='{actual_category}' → GPT='{category}'")
+
+    # 間違って分類されたファイルの詳細分析
+    if misclassified_files:
+        print("\n" + "=" * 60)
+        print("誤分類ファイルの詳細分析")
+        print("=" * 60)
+
+        # カテゴリ間の混同行列のような情報
+        confusion_data = {}
+        for item in misclassified_files:
+            correct_cat = item['correct_category']
+            gpt_cat = item['gpt_category']
+            key = f"{correct_cat} → {gpt_cat}"
+
+            if key not in confusion_data:
+                confusion_data[key] = []
+            confusion_data[key].append(item['file'])
+
+        print("誤分類パターン:")
+        for pattern, files in sorted(confusion_data.items()):
+            print(f"\n{pattern}: {len(files)} ファイル")
+            for file in sorted(files[:5]):  # 最初の5個を表示
+                print(f"  - {file}")
+            if len(files) > 5:
+                print(f"  ... 他{len(files)-5}個")
+
+        # 見逃されたファイル（正解データにあるがGPTで分類されていない）
+        missed_files = correct_files - gpt_files
+        if missed_files:
+            print(f"\n見逃されたファイル: {len(missed_files)} 個")
+            missed_by_category = {}
+            for file in missed_files:
+                category = correct_mapping[file]
+                if category not in missed_by_category:
+                    missed_by_category[category] = []
+                missed_by_category[category].append(file)
+
+            for category, files in sorted(missed_by_category.items()):
+                print(f"  {category}: {len(files)} ファイル")
+                for file in sorted(files[:3]):
+                    print(f"    - {file}")
+                if len(files) > 3:
+                    print(f"    ... 他{len(files)-3}個")
 
     return {
         'precision': precision,
         'recall': recall,
         'f1_score': f1_score,
+        'noise_rate': noise_rate,
+        'error_index': error_index,
         'correct_classifications': correct_classifications,
+        'misclassified_files': len(misclassified_files),
         'total_correct_files': total_correct_files,
         'total_gpt_files': total_gpt_files
     }
@@ -1424,75 +1602,85 @@ def main():
     メイン処理
     ユーザーに問題識別子を入力してもらい、ファイルの仕分けと評価を実行
     """
-    print("ファイル仕分け・評価ツール")
+    print("ファイル分類・評価ツール")
+    print("=" * 60)
+    print("利用可能な問題識別子: aa, ag, bc, bi, bo, bz, d, j, v, x")
+    print("終了するには 'q' または 'quit' を入力してください")
     print("=" * 60)
 
-    # 問題識別子の入力
-    problem_id = input("問題識別子を入力してください (例: x, aa, bc など): ").strip()
+    while True:
+        # 問題識別子の入力
+        problem_id = input("\n問題識別子を入力してください (例: x, aa, bc, q など): ").strip()
 
-    if not problem_id:
-        print("エラー: 問題識別子が入力されていません")
-        return
+        # 終了条件のチェック
+        if problem_id.lower() in ['q', 'quit', 'exit']:
+            print("ツールを終了します。")
+            break
 
-    # ディレクトリパスを構築
-    base_path = os.path.dirname(os.path.abspath(__file__))
-    correct_directory = os.path.join(base_path, f"submissions_typical90_{problem_id}")
-    source_directory = os.path.join(base_path, f"submissions_typical90_{problem_id}_gpt")
-    gpt_cluster_directory = source_directory + "_cluster"
+        if not problem_id:
+            print("エラー: 問題識別子が入力されていません")
+            continue
 
-    print(f"\n正解ディレクトリ: {correct_directory}")
-    print(f"未分類ディレクトリ: {source_directory}")
-    print(f"GPT分類結果ディレクトリ: {gpt_cluster_directory}")
+        # ディレクトリパスを構築
+        base_path = os.path.dirname(os.path.abspath(__file__))
+        correct_directory = os.path.join(base_path, f"submissions_typical90_{problem_id}")
+        source_directory = os.path.join(base_path, f"submissions_typical90_{problem_id}_gpt")
+        gpt_cluster_directory = source_directory + "_cluster"
 
-    # ディレクトリの存在チェック
-    if not os.path.exists(source_directory):
-        print(f"\nエラー: 未分類ディレクトリ '{source_directory}' が見つかりません")
-        return
+        print(f"\n正解ディレクトリ: {correct_directory}")
+        print(f"未分類ディレクトリ: {source_directory}")
+        print(f"GPT分類結果ディレクトリ: {gpt_cluster_directory}")
 
-    # カテゴリ情報を選択
-    categories_map = {
-        "aa": (aa_cluster_categories, aa_cluster_label),
-        "ag": (ag_cluster_categories, ag_cluster_label),
-        "bc": (bc_cluster_categories, bc_cluster_label),
-        "bi": (bi_cluster_categories, bi_cluster_label),
-        "bo": (bo_cluster_categories, bo_cluster_label),
-        "bz": (bz_cluster_categories, bz_cluster_label),
-        "d": (d_cluster_categories, d_cluster_label),
-        "j": (j_cluster_categories, j_cluster_label),
-        "v": (v_cluster_categories, v_cluster_label),
-        "x": (x_cluster_categories, x_cluster_label)
-    }
+        # ディレクトリの存在チェック
+        if not os.path.exists(source_directory):
+            print(f"\nエラー: 未分類ディレクトリ '{source_directory}' が見つかりません")
+            print("別の問題識別子を試してください。")
+            continue
 
-    if problem_id not in categories_map:
-        print(f"\nエラー: 問題識別子 '{problem_id}' に対応するカテゴリ情報が見つかりません")
-        print(f"利用可能な問題識別子: {', '.join(categories_map.keys())}")
-        return
+        # カテゴリ情報を選択
+        categories_map = {
+            "aa": (aa_cluster_categories, aa_cluster_label),
+            "ag": (ag_cluster_categories, ag_cluster_label),
+            "bc": (bc_cluster_categories, bc_cluster_label),
+            "bi": (bi_cluster_categories, bi_cluster_label),
+            "bo": (bo_cluster_categories, bo_cluster_label),
+            "bz": (bz_cluster_categories, bz_cluster_label),
+            "d": (d_cluster_categories, d_cluster_label),
+            "j": (j_cluster_categories, j_cluster_label),
+            "v": (v_cluster_categories, v_cluster_label),
+            "x": (x_cluster_categories, x_cluster_label)
+        }
 
-    categories, submission_labels = categories_map[problem_id]
+        if problem_id not in categories_map:
+            print(f"\nエラー: 問題識別子 '{problem_id}' に対応するカテゴリ情報が見つかりません")
+            print(f"利用可能な問題識別子: {', '.join(categories_map.keys())}")
+            continue
 
-    # 仕分け処理の実行
-    print("\n" + "=" * 60)
-    print("ファイル仕分け処理を開始します...")
-    print("=" * 60)
-    organize_files_by_category(source_directory, categories, submission_labels)
-    print("\n仕分け処理が完了しました！")
+        categories, submission_labels = categories_map[problem_id]
 
-    # 評価処理の実行
-    if os.path.exists(correct_directory):
+        # 分類処理の実行
         print("\n" + "=" * 60)
-        print("評価処理を開始します...")
+        print("ファイル分類処理を開始します...")
         print("=" * 60)
+        classification_result = classify_files_by_category(source_directory, categories, submission_labels)
+        print("\n分類処理が完了しました！")
 
-        correct_mapping = collect_correct_classifications(correct_directory)
-        gpt_mapping = collect_gpt_classifications(gpt_cluster_directory)
+        # 評価処理の実行
+        if os.path.exists(correct_directory):
+            print("\n" + "=" * 60)
+            print("評価処理を開始します...")
+            print("=" * 60)
 
-        if correct_mapping and gpt_mapping:
-            metrics = calculate_evaluation_metrics(correct_mapping, gpt_mapping)
+            correct_mapping = collect_correct_classifications(correct_directory)
+            gpt_mapping = convert_classification_result_to_mapping(classification_result)
+
+            if correct_mapping and gpt_mapping:
+                metrics = calculate_evaluation_metrics(correct_mapping, gpt_mapping)
+            else:
+                print("\n警告: 評価に必要なデータが不足しています")
         else:
-            print("\n警告: 評価に必要なデータが不足しています")
-    else:
-        print(f"\n警告: 正解ディレクトリ '{correct_directory}' が見つかりません")
-        print("評価処理はスキップされます")
+            print(f"\n警告: 正解ディレクトリ '{correct_directory}' が見つかりません")
+            print("評価処理はスキップされます")
 
 if __name__ == "__main__":
     main()
