@@ -134,7 +134,7 @@ style: |
     text-align: right;
     /* emではなくpxで指定すると確実です。必要に応じて数字を大きくしてください */
     font-size: 40px;
-    margin-top: 80px;
+    margin-top: 160px;
     line-height: 1.5;
     color: #1a5490; /* 文字色を明示したい場合 */
     font-weight: bold; /* 太字にする設定 */

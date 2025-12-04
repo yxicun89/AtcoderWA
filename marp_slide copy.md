@@ -158,12 +158,57 @@ style: |
     margin: 20px 0;
     border-radius: 5px;
   }
+  .point-box {
+    background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+    padding: 4px 25px;
+    margin: 20px 0;
+    border-radius: 5px;
+  }
   /* コードボックス用（疑似コードなど） */
   .code {
     background: #f4f4f4;
     margin: 20px 0;
     border-radius: 5px;
-    max-width: 50%;
+    max-width: 100%;
+    width: 100%;
+  }
+  .code pre {
+    margin: 0;
+    padding: 15px;
+    width: 100%;
+  }
+  .code code {
+    display: block;
+    width: 100%;
+    text-align: left;
+  }
+  .code-1 {
+    background: #f4f4f4;
+    margin: 20px 0;
+    border-radius: 5px;
+    max-width: 100%;
+    width: 80%;
+  }
+  .code-1 pre {
+    margin: 0;
+    padding: 15px;
+    width: 100%;
+  }
+  .code-1 code {
+    display: block;
+    width: 100%;
+    text-align: left;
+  }
+  /* パワポ編集用空白スペース */
+  .powerpoint-space {
+    background-color: #ffffff;
+    width: 100%;
+    height: 400px;
+    margin-top: -30px;
+  }
+  /* 分類の仕組みタイトル上げ用 */
+  .title-up {
+    margin-top: -40px;
   }
   .columns {
   display: grid;
@@ -178,7 +223,7 @@ style: |
     text-align: right;
     /* emではなくpxで指定すると確実です。必要に応じて数字を大きくしてください */
     font-size: 40px;
-    margin-top: 80px;
+    margin-top: 160px;
     line-height: 1.5;
     color: #1a5490; /* 文字色を明示したい場合 */
     font-weight: bold; /* 太字にする設定 */
@@ -186,7 +231,9 @@ style: |
   .margin {
     margin-top: 30px;
   }
-
+  .margin-white {
+    margin-bottom: 70px;
+  }
   /* タイトルページ用のセンタリングコンテナ */
   .title-center {
     text-align: center;
@@ -468,9 +515,6 @@ style: |
     height: 100%;
     margin-top: 20px;
   }
-  .code{
-    font-size: 0.7em;
-  }
   .result-table {
     font-size: 0.75em;
   }
@@ -661,7 +705,35 @@ padding: 15px 25px; -->
 
 ---
 
-## 制御フローグラフ (CFG) と データフローグラフ(DFG)
+## Asanas Cluster
+
+<div class = "asanas-res">
+
+先行研究では,構造的かつ意味的アプローチを組み合わせた<br>ソースコード自動分類ツール **Asanas Cluster** が提案されている [2]
+
+</div>
+
+![medium asanas diagram](asanas.jpg)
+
+<!--
+### 概要 -->
+
+<!-- <div class="box">
+<div class = "asanas-exp">
+
+ソースコードから **制御フローグラフ(CFG)** と **データフローグラフ(DFG)** を作成し,特徴量を抽出
+
+→抽出した特徴量をもとにクラスタリングを実施する
+</div>
+</div> -->
+
+<div class="footer-note-small">
+[2] Paiva, J.C., Leal, J.P., and Figueira, Á., Clustering source code from automated assessment of programming assignments. </br>International Journal of Data Science and Analytics,  Volume 20, pages 1581–1592, (2025).
+</div>
+
+---
+
+## 制御フローグラフ と データフローグラフ
 
 **Control Flow Graph (CFG)**: プログラム内の **「処理の流れ」** を表現したグラフ
 
@@ -710,7 +782,12 @@ def count_evens(numbers):
 
 ### 制御フローグラフ(CFG)
 
-![full cfg](cfg_count_evens.png)
+<div class = "margin-white"></div>
+
+![full cfg](white.png)
+
+<div class = "margin-white"></div>
+
 
 <div class = "box">
 
@@ -790,7 +867,7 @@ def count_evens(numbers):
 
 ## 分類の仕組み
 抽出した特徴量をもとに以下疑似コードによるクラスタリングアルゴリズムを実行
-<!-- <div class="grid-7-3 classification-section"> -->
+<div class="grid-7-3 classification-section">
 
 <div>
 
@@ -824,29 +901,87 @@ until no more submissions
 
 </div>
 
+</div>
+
+
+</div>
+
+---
+
+## 分類の仕組み
+抽出した特徴量をもとに以下疑似コードによるクラスタリングアルゴリズムを実行
+<div class="grid-7-3 classification-section">
+
 <div>
 
-<!-- ### ポイント -->
+### 疑似コード
 
-<!-- <div class="box"> -->
+<div class = "code-1">
+
+```
+Require: 2 <= k <= 16
+Ensure: dist(c, S) は距離関数
+Ensure: N はゼロ初期化配列
+Ensure: C は k-means++ で初期化
+
+repeat
+    Let S be the new solution
+    min, min_c ← ∞, 0
+    for c ∈ C do
+        d ← dist(c, S)
+        if d <= min then
+            min ← d
+            min_c ← c
+        end if
+    end for
+    N[min_c] ← N[min_c] + 1
+    if S is correct then
+        min_c ← min_c +
+          (1/N[min_c]) × (S - min_c)
+    end if
+until no more submissions
+```
+
+</div>
+
+</div>
+
+<div>
+
+### ポイント
+
+<div class="point-box">
 <!-- <div class = "margin"></div> -->
 
-<!-- - クラスタ数: 2~16個
+クラスタ数: 2~16個
+</div>
 
-- 初期配置をkmeans++にし,局所解防止
+<div class="point-box">
 
-- ユークリッド距離を用いて最も近いセントロイドを発見
+距離関数はユークリッド距離を用いる
+</div>
 
-- 正解セントロイドを与え,正しい解の場合のみ
+<div class="point-box">
+
+初期配置をkmeans++にし,局所解防止
+</div>
+
+<div class="point-box">
+データが一つ増えるたび重心を更新
+</div>
+
+<div class="point-box">
+
+正解セントロイドを与え,正しい解の場合のみ
 セントロイドを移動
+</div>
 
-- データが一つ増えるたび重心を更新 -->
-
-<!-- </div> -->
+</div>
 
 </div>
 
 </div>
+
 
 ---
 
@@ -1433,14 +1568,3 @@ LLMは**コードの意味を理解**できるため,「誤答パターンの分
 <!-- <div class="footer-note-large">
 → 競技プログラミング教育の質と効率を向上させる基盤技術へ
 </div> -->
-
----
-
-<!-- _class: lead -->
-<!-- _paginate: false -->
-
-<div class="ending-message">
-
-ご清聴ありがとうございました
-
-</div>
