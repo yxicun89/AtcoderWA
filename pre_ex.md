@@ -117,6 +117,12 @@ style: |
     white-space: nowrap !important;
   }
 
+  /* 赤色太字スタイル（高スコア用） */
+  .red-bold {
+    color: #dc3545;
+    font-weight: 900;
+  }
+
   /* 強調文字を「蛍光ペン風」にする */
   strong {
     color: #2c3e50;
@@ -245,7 +251,6 @@ style: |
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 30px;
-    margin-top: 25px;
   }
 
   /* 実験結果用の広い間隔 */
@@ -253,7 +258,7 @@ style: |
     display: grid !important;
     grid-template-columns: 1fr 1fr !important;
     gap: 60px !important;
-    margin-top: 25px !important;
+    margin-top: -10px !important;
   }
 
   /* グリッドレイアウト（7:3比率） */
@@ -281,13 +286,20 @@ style: |
     border: 2px solid #3498db;
     margin-bottom: 10px;
   }
-
-  /* 警告ボックス（赤） */
-  .warning-box {
-    padding: 12px;
+  .warning-box-hal {
+    padding: 10px;
     background: #f8d7da;
     border-left: 5px solid #dc3545;
     border-radius: 5px;
+    font-size: 0.85em;
+  }
+  /* 警告ボックス（赤） */
+  .warning-box {
+    padding: 8px;
+    background: #f8d7da;
+    border-left: 5px solid #dc3545;
+    border-radius: 5px;
+    margin-top: -15px;
   }
 
   /* ヒントボックス */
@@ -326,6 +338,7 @@ style: |
     padding: 12px;
     background: #ffe6e6;
     border-radius: 5px;
+    font-size: 0.85em;
   }
 
   /* 成功ボックス（黄色・大きめ） */
@@ -376,11 +389,18 @@ style: |
     font-size: 0.62em;
     font-family: 'Meiryo', 'メイリオ', sans-serif;
   }
-  .footer-note-small-asanas {
+  .footer-note-small-result {
     text-align: center;
     margin-top: 20px;
     color: #555;
-    font-size: 0.62em;
+    font-size: 0.58em;
+    font-family: 'Meiryo', 'メイリオ', sans-serif;
+  }
+  .footer-note-small-result-2 {
+    text-align: center;
+    margin-top: 0px;
+    color: #555;
+    font-size: 0.58em;
     font-family: 'Meiryo', 'メイリオ', sans-serif;
   }
   /* フッターノート（小さめ） */
@@ -461,22 +481,28 @@ style: |
     line-height: 1.5;
   }
 
+  .category-text-2 {
+    font-size: 0.9em;
+    margin-top: -20px;
+  }
+
   /* エラー指数セクション専用 */
   .error-index-section {
     display: flex;
     align-items: center;
     gap: 30px;
-    max-width: 85%;
+    max-width: 95%;
     margin-left: 0;
   }
 
   .error-index-section .error-index-text {
-    flex: 2;
+    flex: 1.5;
     line-height: 1.5;
+    font-size: 0.9em;
   }
 
    .error-index-section .error-index-formula {
-    flex: 1.5;
+    flex: 2.6;
     flex-shrink: 0;
     margin-bottom: 20px; /* 下に余白を追加 */
     }
@@ -495,8 +521,17 @@ style: |
   .grad{
     font-size: 0.9em;
   }
+  .after{
+    font-size: 0.9em;
+    margin-top: -20px;
+  }
   .purpose{
-    font-size: 1.0em;
+    font-size: 1.5em;
+    padding: 4px 25px;
+    margin: 20px 0;
+  }
+  .purpose-all{
+    font-size: 1.2em;
     padding: 4px 25px;
     margin: 20px 0;
   }
@@ -515,6 +550,13 @@ style: |
   }
   .result-table {
     font-size: 0.75em;
+  }
+
+  /* Asanas Cluster成功例の中央寄せテキスト */
+  .asanas-success-text {
+    text-align: center;
+    font-size: 1.00em;
+    margin: 10px 0;
   }
 
   /* 画像サイズ調整用 */
@@ -572,7 +614,7 @@ padding: 15px 25px; -->
 
 ---
 
-## 背景：卒業研究からの継続課題
+## 背景(1/2)
 
 ### 卒業研究
 
@@ -627,7 +669,7 @@ padding: 15px 25px; -->
 
 ---
 
-## 研究背景：発見した課題
+## 背景(2/2)
 
 ### 卒業研究で直面した問題
 
@@ -646,13 +688,12 @@ padding: 15px 25px; -->
 
 ---
 
-## 本研究の目的
+## 目的
 <!--
 ### 提案内容 -->
+<div class="purpose-all">
 
-<div class="purpose">
-
-  収集した誤答に対して,**機械的に分類する手法**を検討
+収集した誤答に対して,<span class="purpose">**機械的に分類する手法**</span>を検討
 </div>
 
 ### 期待される効果
@@ -735,7 +776,7 @@ padding: 15px 25px; -->
 
 ---
 
-## 制御フローグラフ と データフローグラフ
+## 制御フローグラフ と データフローグラフ(1/4)
 
 **Control Flow Graph (CFG)**: プログラム内の **「処理の流れ」** を表現したグラフ
 
@@ -756,7 +797,7 @@ padding: 15px 25px; -->
 
 ---
 
-## 具体例(1/3)
+## 制御フローグラフ と データフローグラフ(2/4)
 
 <div>
 
@@ -780,7 +821,7 @@ def count_evens(numbers):
 
 ---
 
-## 具体例(2/3)
+## 制御フローグラフ と データフローグラフ(3/4)
 
 <div class="grid-2col">
 
@@ -830,7 +871,7 @@ def count_evens(numbers):
 
 ---
 
-## 具体例(3/3)
+## 制御フローグラフ と データフローグラフ(4/4)
 
 <div class="grid-2col">
 
@@ -918,7 +959,7 @@ def count_evens(numbers):
 ---
 
 ## 分類の仕組み
-抽出した特徴量をもとにkmeans法で分類
+抽出した特徴量をもとに**k-means法**で分類
 
 <div class="box">
 
@@ -938,7 +979,7 @@ def count_evens(numbers):
 
 ---
 
-## k-meansアルゴリズム（1/4）
+## k-means法（1/4）
 
 ### Step 1: 初期化 - クラスタをランダムに割り振る
 
@@ -950,13 +991,13 @@ def count_evens(numbers):
 
 <div class="box">
 
-各データにクラスタを**ランダム**に割り振る(この場合クラスタ数は3)
+各データにクラスタを**ランダム**に割り振る(この場合クラスタ数は2)
 
 </div>
 
 ---
 
-## k-meansアルゴリズム（2/4）
+## k-means法（2/4）
 
 ### Step 2: 重心の計算
 
@@ -974,7 +1015,7 @@ def count_evens(numbers):
 
 ---
 
-## k-meansアルゴリズム（3/4）
+## k-means法（3/4）
 
 ### Step 3: 再割り当て - 最も近い重心のクラスタへ
 
@@ -992,7 +1033,7 @@ def count_evens(numbers):
 
 ---
 
-## k-meansアルゴリズム（4/4）
+## k-means法（4/4）
 
 ### Step 4: 収束まで繰り返し
 
@@ -1011,32 +1052,21 @@ def count_evens(numbers):
 ---
 
 ## 分類の仕組み
-Asanas Clusterでは一般的なKmeans法に複数の工夫を加え、より正確な分類を実現
+Asanas Clusterでは一般的なK-means法に工夫を加え、**より正確な分類**を実現
 
 ### ポイント
 
 <div class="point-box">
 
-クラスタ数K: 2~16個
-</div>
+- クラスタ数K: **2~16**個
 
-<div class="point-box">
+- 距離関数は**ユークリッド距離**を用いる
 
-距離関数はユークリッド距離を用いる
-</div>
+- 初期配置をk-means++にし,**局所解防止**
 
-<div class="point-box">
+- **データが一つ増えるたび**重心を更新
 
-初期配置をkmeans++にし,局所解防止
-</div>
-
-<div class="point-box">
-データが一つ増えるたび重心を更新
-</div>
-
-<div class="point-box">
-
-正解セントロイドを与え,正しい解の場合のみセントロイドを移動
+- 正解セントロイドを与え,**正しい解の場合のみ**セントロイドを移動
 </div>
 
 ---
@@ -1046,14 +1076,35 @@ Asanas Clusterでは一般的なKmeans法に複数の工夫を加え、より正
 
 <div class = "asanas-res">
 
-このスライドでは先行研究で何がうまくいったかを説明する(先行研究の名誉のため)
-この手法を用いることでこのデータでこんな感じのいい結果を得られた
-プログラミングの演習問題[参考文献のこの問題で深さ優先探索と幅優先探索、あとソート系の仕分けは行えてたっていう例を書いてうまくできてそうということをいう]
+11個のの特徴量に対してk-means法を適用すると**アルゴリズム戦略に基づいた分類**が可能
+
+</div>
+<div class="grid-2col">
+<div>
+
+![big asanas diagram](search.jpg)
+
+<div class="asanas-success-text">
+
+**深さ優先探索**と**幅優先探索**
 
 </div>
 
-![medium asanas diagram](asanas.jpg)
+</div>
 
+<div>
+
+![big asanas diagram](sort.jpg)
+
+<div class="asanas-success-text">
+
+**ヒープ**,**マージ**,**挿入**,**クイック**ソート
+
+</div>
+
+</div>
+
+</div>
 <!--
 ### 概要 -->
 
@@ -1085,7 +1136,7 @@ Asanas Clusterでは一般的なKmeans法に複数の工夫を加え、より正
 
 構造的・意味的アプローチ
 
-**CFG**と**DFG**から特徴量を抽出し,<br>疑似コードによる分類
+**CFG**と**DFG**から特徴量を抽出し,<br>k-means法による分類
 
 </div>
 
@@ -1094,7 +1145,7 @@ Asanas Clusterでは一般的なKmeans法に複数の工夫を加え、より正
 ### 手法2：LLM
 意味的・行動的アプローチ
 
-LLMを用いた自然言語による誤答分類
+**LLMを用いた**自然言語による誤答分類
 
 </div>
 
@@ -1185,7 +1236,7 @@ n. [カテゴリn]
 
 ### データセット
 
-- **対象**: 競プロ典型90問（★2）の誤答(Wrong Answer,またはTime Limit Error)
+- **対象**: 競プロ典型90問（★2）の誤答(Wrong Answer,またはTime Limit Exceeded)
 - **正解ラベル**: 手作業で問題ごとにカテゴリ分類
   - 例：「条件考慮漏れ」「全探索することでTLE」「差分の計算間違い」など
 
@@ -1195,29 +1246,29 @@ n. [カテゴリn]
 
 <div>
 
-**エラー指数**
+**評価指標：F値 (F1-score)**
 
 <div class="error-index-section">
 
 <div class="error-index-text">
 
-1つのグループに異なる種類の誤答が<br>どれだけ混ざっているかを測定
-（**0に近いほど良い**）
+**適合率**と**再現率** の調和平均
+**ノイズ**と**取りこぼしの少なさ**を<br>両立して評価
+（**1に近いほど良い**）
 
 </div>
 
-<!-- <div class = ""> -->
 <div class="error-index-formula">
 
 $$
-\text{Error Index} = \frac{n_{\text{total}} - n_{\text{max}}}{n_{\text{total}}}
+\text{F1} = 2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}
 $$
 
 <div class = "box">
 <div class="small-text">
 
-$n_{\text{total}}$: グループ内の誤答総数
-$n_{\text{max}}$: 最多カテゴリの誤答数
+$\text{Precision} = \text{正解数} / \text{分類した総数}$ （適合率）
+$\text{Recall} \quad \ = \text{正解数} / \text{正解データの総数}$ （再現率）
 
 </div>
 
@@ -1226,18 +1277,6 @@ $n_{\text{max}}$: 最多カテゴリの誤答数
 </div>
 
 </div>
-
-</div>
-
-<div>
-
-<!-- **一致率**
-<div class = "small-text">
-正解との一致度を測定
-
-自動分類の結果が,人間が分類した<br>正解とどれだけ一致しているか
-
-→ 高いほど精度が良い -->
 
 </div>
 
@@ -1255,24 +1294,24 @@ $n_{\text{max}}$: 最多カテゴリの誤答数
 
 | 問題 | カテゴリ | 手法1 | 手法2 |
 |:---:|:---|:---:|:---:|
-| **AA** | カテゴリ1 | 0.XX | 0.XX |
-|  | カテゴリ2 | 0.XX | 0.XX |
-|  | カテゴリ3 | 0.XX | 0.XX |
-|  | カテゴリ4 | 0.XX | 0.XX |
-|  | カテゴリ5 | 0.XX | 0.XX |
-| **AG** | カテゴリ1 | 0.XX | 0.XX |
-|  | カテゴリ2 | 0.XX | 0.XX |
-| **BC** | カテゴリ1 | 0.XX | 0.XX |
-|  | カテゴリ2 | 0.XX | 0.XX |
-|  | カテゴリ3 | 0.XX | 0.XX |
-|  | カテゴリ4 | 0.XX | 0.XX |
-|  | カテゴリ5 | 0.XX | 0.XX |
-| **BI** | カテゴリ1 | 0.XX | 0.XX |
-|  | カテゴリ2 | 0.XX | 0.XX |
-| **BO** | カテゴリ1 | 0.XX | 0.XX |
-|  | カテゴリ2 | 0.XX | 0.XX |
-|  | カテゴリ3 | 0.XX | 0.XX |
-|  | カテゴリ4 | 0.XX | 0.XX |
+| **AA** | カテゴリ1 | 0.33 | 0.91 |
+|  | カテゴリ2 | 0.50 | 0.57 |
+|  | カテゴリ3 | 0.51 | 0.77 |
+|  | カテゴリ4 | 0.00 | 0.35 |
+|  | カテゴリ5 | 0.26 | 0.62 |
+| **AG** | カテゴリ1 | 0.29 | 0.57 |
+|  | カテゴリ2 | 0.97 | 0.98 |
+| **BC** | カテゴリ1 | 0.00 | 0.33 |
+|  | カテゴリ2 | 0.40 | 0.26 |
+|  | カテゴリ3 | 0.00 | 0.27 |
+|  | カテゴリ4 | 0.50 | 0.67 |
+|  | カテゴリ5 | 0.76 | 0.67 |
+| **BI** | カテゴリ1 | 0.82 | 0.65 |
+|  | カテゴリ2 | 0.00 | 0.83 |
+| **BO** | カテゴリ1 | 0.86 | 0.82 |
+|  | カテゴリ2 | 0.00 | 0.36 |
+|  | カテゴリ3 | 0.00 | 0.11 |
+|  | カテゴリ4 | 0.19 | 0.00 |
 
 </div>
 
@@ -1280,33 +1319,94 @@ $n_{\text{max}}$: 最多カテゴリの誤答数
 
 | 問題 | カテゴリ | 手法1 | 手法2 |
 |:---:|:---|:---:|:---:|
-| **BZ** | カテゴリ1 | 0.XX | 0.XX |
-|  | カテゴリ2 | 0.XX | 0.XX |
-|  | カテゴリ3 | 0.XX | 0.XX |
-| **D** | カテゴリ1 | 0.XX | 0.XX |
-|  | カテゴリ2 | 0.XX | 0.XX |
-|  | カテゴリ3 | 0.XX | 0.XX |
-|  | カテゴリ4 | 0.XX | 0.XX |
-| **J** | カテゴリ1 | 0.XX | 0.XX |
-|  | カテゴリ2 | 0.XX | 0.XX |
-|  | カテゴリ3 | 0.XX | 0.XX |
-|  | カテゴリ4 | 0.XX | 0.XX |
-|  | カテゴリ5 | 0.XX | 0.XX |
-| **V** | カテゴリ1 | 0.XX | 0.XX |
-|  | カテゴリ2 | 0.XX | 0.XX |
-|  | カテゴリ3 | 0.XX | 0.XX |
-|  | カテゴリ4 | 0.XX | 0.XX |
-| **X** | カテゴリ1 | 0.XX | 0.XX |
-|  | カテゴリ2 | 0.XX | 0.XX |
-|  | カテゴリ3 | 0.XX | 0.XX |
+| **BZ** | カテゴリ1 | 0.00 | 0.68 |
+|  | カテゴリ2 | 0.63 | 0.00 |
+|  | カテゴリ3 | 0.23 | 0.40 |
+| **D** | カテゴリ1 | 0.00 | 0.33 |
+|  | カテゴリ2 | 0.50 | 0.22 |
+|  | カテゴリ3 | 0.56 | 0.44 |
+|  | カテゴリ4 | 0.52 | 0.50 |
+| **J** | カテゴリ1 | 0.00 | 0.67 |
+|  | カテゴリ2 | 0.64 | 0.87 |
+|  | カテゴリ3 | 0.13 | 0.83 |
+|  | カテゴリ4 | 0.24 | 0.94 |
+|  | カテゴリ5 | 0.00 | 0.67 |
+| **V** | カテゴリ1 | 0.33 | 0.53 |
+|  | カテゴリ2 | 0.00 | 0.58 |
+|  | カテゴリ3 | 0.27 | 0.66 |
+|  | カテゴリ4 | 0.67 | 0.83 |
+| **X** | カテゴリ1 | 0.67 | 0.83 |
+|  | カテゴリ2 | 0.07 | 0.71 |
+|  | カテゴリ3 | 0.11 | 0.77 |
 
 </div>
 
 </div>
 
-<div class="box">
+---
 
-→ LLMによる分類の方が**エラー指数が低く**,より正確な分類を実現
+## 実験結果：全体の比較
+
+- 各問題・各カテゴリにおけるF値
+
+<div class="result-grid">
+
+<div class="result-table">
+
+| 問題 | カテゴリ | 手法1 | 手法2 |
+|:---:|:---|:---:|:---:|
+| **AA** | カテゴリ1 | 0.33 | 0.91 |
+|  | カテゴリ2 | 0.50 | 0.57 |
+|  | カテゴリ3 | 0.51 | 0.77 |
+|  | カテゴリ4 | 0.00 | 0.35 |
+|  | カテゴリ5 | 0.26 | 0.62 |
+| **AG** | カテゴリ1 | 0.29 | 0.57 |
+|  | カテゴリ2 | 0.97 | 0.98 |
+| **BC** | カテゴリ1 | 0.00 | 0.33 |
+|  | カテゴリ2 | 0.40 | 0.26 |
+|  | カテゴリ3 | 0.00 | 0.27 |
+|  | カテゴリ4 | 0.50 | 0.67 |
+|  | カテゴリ5 | 0.76 | 0.67 |
+| **BI** | カテゴリ1 | 0.82 | <span class="red-bold">0.65</span> |
+|  | カテゴリ2 | 0.00 | <span class="red-bold">0.83</span> |
+| **BO** | カテゴリ1 | 0.86 | 0.82 |
+|  | カテゴリ2 | 0.00 | 0.36 |
+|  | カテゴリ3 | 0.00 | 0.11 |
+|  | カテゴリ4 | 0.19 | 0.00 |
+
+<!-- <div class = "box">
+
+全体的に**手法2**の方が**高スコア** Bi,J,Xが高スコア
+
+</div> -->
+
+</div>
+
+<div class="result-table">
+
+| 問題 | カテゴリ | 手法1 | 手法2 |
+|:---:|:---|:---:|:---:|
+| **BZ** | カテゴリ1 | 0.00 | 0.68 |
+|  | カテゴリ2 | 0.63 | 0.00 |
+|  | カテゴリ3 | 0.23 | 0.40 |
+| **D** | カテゴリ1 | 0.00 | 0.33 |
+|  | カテゴリ2 | 0.50 | 0.22 |
+|  | カテゴリ3 | 0.56 | 0.44 |
+|  | カテゴリ4 | 0.52 | 0.50 |
+| **J** | カテゴリ1 | 0.00 | <span class="red-bold">0.67</span> |
+|  | カテゴリ2 | 0.64 | <span class="red-bold">0.87</span> |
+|  | カテゴリ3 | 0.13 | <span class="red-bold">0.83</span> |
+|  | カテゴリ4 | 0.24 | <span class="red-bold">0.94</span> |
+|  | カテゴリ5 | 0.00 | <span class="red-bold">0.67</span> |
+| **V** | カテゴリ1 | 0.33 | 0.53 |
+|  | カテゴリ2 | 0.00 | 0.58 |
+|  | カテゴリ3 | 0.27 | 0.66 |
+|  | カテゴリ4 | 0.67 | 0.83 |
+| **X** | カテゴリ1 | 0.67 | <span class="red-bold">0.83</span> |
+|  | カテゴリ2 | 0.07 | <span class="red-bold">0.71</span> |
+|  | カテゴリ3 | 0.11 | <span class="red-bold">0.77</span> |
+
+</div>
 
 </div>
 
@@ -1330,7 +1430,7 @@ N人の生徒が2クラスに分かれており、学籍番号i番のクラスCi
 
 <div class="grid-2col">
 
-<div class="small-text-asanas">
+<div class = "category-text-2">
 
 - **インデックス以外のクエリ処理での間違い**
 - **クエリ処理時のインデックス処理での間違い**
@@ -1338,22 +1438,18 @@ N人の生徒が2クラスに分かれており、学籍番号i番のクラスCi
 
 </div>
 
-<div class="small-text-asanas">
+<div class="category-text-2">
 
 - **累積和使っていない**
 - **結果の計算間違い**
 
-<div class="footer-note-small-asanas">
+<div class="footer-note-small-result">
 [3] 競プロ典型90問 , “010 - Score Sum Queries”, “https://atcoder.jp/contests/typical90/tasks/typical90_j” ​
 </div>
 
 </div>
 
-
-
 </div>
-
-
 
 ---
 
@@ -1439,30 +1535,41 @@ for i in range(n):
 
 ## 実験結果：手法2（LLM）- 成功例
 
-### 問題例：典型90問-問題BC
+### 問題例：典型90問- 010 Score Sum Queries
 
 <div class="box">
 
 **問題文**
-
-n個の整数から5個選び,それら整数の積をPで割るとQ余る組み合わせを求める問題[4]
+N人の生徒が2クラスに分かれており、学籍番号i番のクラスCiと点数Piが入力される。
+そこからQ個,LiとRiの入力を受け取り、それぞれについて以下を求める問題 [3]
+- 学籍番号Lj~Rj番の1組生徒における、期末試験点数の合計
+- 学籍番号Lj~Rj番の2組生徒における、期末試験点数の合計
 
 </div>
-
 
 ### 間違いのカテゴリ
 
-<div class="small-text">
+<div class="grid-2col">
 
-- **全パターン探索によるTLE**
-- **組み合わせの作成・選択ミス**: 選択する組み合わせに誤り
-- **条件確認のミス**: 計算以外の条件確認に誤り
-- **剰余計算のエラー**: 計算方法は正しいが,剰余計算部分で誤り
-- **剰余計算以外の計算間違い**:例:整数ではなくインデックスで計算している
+<div class = "category-text-2">
+
+- **インデックス以外のクエリ処理での間違い**
+- **クエリ処理時のインデックス処理での間違い**
+- **累積和作成での間違い**
+
 </div>
 
-<div class="footer-note-small-second">
-[4] 競プロ典型90問 , “055 - Select 5”, “https://atcoder.jp/contests/typical90/tasks/typical90_bc” ​
+<div class="category-text-2">
+
+- **累積和使っていない**
+- **結果の計算間違い**
+
+<div class="footer-note-small-result">
+[3] 競プロ典型90問 , “010 - Score Sum Queries”, “https://atcoder.jp/contests/typical90/tasks/typical90_j” ​
+</div>
+
+</div>
+
 </div>
 
 ---
@@ -1514,31 +1621,45 @@ for i in range(n):
 
 ## 実験結果：手法2（LLM）- 失敗例
 
-### 問題例：典型90問-問題BC
+### 問題例：典型90問-問題V
 
 <div class="box">
 
 **問題文**
-
-n個の整数から5個選び,それら整数の積をPで割るとQ余る組み合わせを求める問題[5]
-
+幅A、高さB、奥行きCの直方体に対して最小何回で<br>すべてのピースを立方体にできるのか求める。
+この立方体に対してある面に平行に切断することはできる。
+ただし、直方体を動かすことはできない。
+A,B,Cは10^18以下の大きさの整数。[4]
 </div>
-
 
 ### 間違いのカテゴリ
 
-<div class="small-text">
+<div class="grid-2col">
 
-- **全パターン探索によるTLE**
-- **組み合わせの作成・選択ミス**: 選択する組み合わせに誤り
-- **条件確認のミス**: 計算以外の条件確認に誤り
-- **剰余計算のエラー**: 計算方法は正しいが,剰余計算部分で誤り
-- **剰余計算以外の計算間違い**:例:整数ではなくインデックスで計算している
+<div class = "category-text-2">
+
+- **最大公約数算出間違い**
+- **浮動小数点誤差による計算誤差**
+
 </div>
 
-<div class="footer-note-small-second">
-[5] 競プロ典型90問 , “055 - Select 5”, “https://atcoder.jp/contests/typical90/tasks/typical90_bc” ​
+<div class="category-text-2">
+
+- **最大公約数を使用しない最小回数算出間違い**
+- **最大公約数を使用した最小回数算出間違い**
+
 </div>
+
+</div>
+
+<div class="footer-note-small-result-2">
+
+[4] 競プロ典型90問 , “022 - Cubic Cake”, “https://atcoder.jp/contests/typical90/tasks/typical90_v”
+
+</div>
+
+</div>
+
 
 ---
 
@@ -1547,25 +1668,30 @@ n個の整数から5個選び,それら整数の積をPで割るとQ余る組み
 <!-- ### ハルシネーションによる誤分類 -->
 
 Pythonライブラリを使用したコードに対して,**もっともらしい嘘**をつくケースが見られた
-
 <div class="error-box">
 
 **誤答コード例**
 ```python
-import heapq
-q = []
-heapq.heappush(q, (cost, node))
-# 実際の誤り: グラフ構造の定義ミス
+import math
+
+A,B,C = map(int,input().split())
+n = math.gcd(A,B,C)
+print((A+B+C//n)-3)
+# 実際の誤り: 演算子の優先度ミス
 ```
 
 **LLMの誤った分析**
-「`heapq.heappush`の使い方が誤っています。第一引数は...」
-→ **誤ったカテゴリ「ライブラリ使用ミス」へ分類**
+- 「`math.gcd`で3つの値の最大公約数を求めていますが、`gcd`は2つの引数のみサポートしています...」
+
+→ **誤ったカテゴリ「最大公約数算出間違い」へ分類**
+
 </div>
 
-<div class="warning-box">
+<div class="warning-box-hal">
 
-- **ハルシネーション**により誤分類が発生する可能性がある
+
+**ハルシネーション**による**誤った分類のリスク**
+
 
 </div>
 
@@ -1599,9 +1725,11 @@ LLMは**コードの意味を理解**できるため,「誤答パターンの分
 
 **課題**
 
-**ハルシネーション**による<br>誤った指摘のリスクが存在
+- **ハルシネーション**による<br>誤った指摘のリスクが存在
 
-→信頼性には注意が必要
+<!-- →信頼性には注意が必要 -->
+
+- 誤答に**複数のカテゴリ**を含む場合<br>**具体的な間違い**を優先
 
 </div>
 
@@ -1609,7 +1737,7 @@ LLMは**コードの意味を理解**できるため,「誤答パターンの分
 
 ---
 
-## 結論
+## まとめ
 
 ### 本研究の成果
 <div class="box">
@@ -1630,29 +1758,31 @@ LLMは**コードの意味を理解**できるため,「誤答パターンの分
 
 ## 今後の展望
 
-**1. 静的解析とLLMのハイブリッド手法検討**
+<div class = "after">
+
+**1. 静的解析とLLMのハイブリッド手法の検討**
 <div class="box">
 
-   - 再現性と柔軟性,両者の長所を組み合わせた判定精度の向上
-   - 誤答の性質に応じた最適な手法の選択
-
+- **再現性**と**柔軟性**の両者の長所を組み合わせ
+- **誤答の性質**に応じた最適な手法の選択による判定精度の向上
 </div>
 
-<!-- **2. Web API化によるシステム公開**
-
-<!-- <div class="box"> -->
-<!--
-   - 開発した分類モデルを外部から利用可能な形で実装
-   - 実際のプログラミング演習環境への導入とデータ収集 --> -->
-
-<!-- </div> -->
-
-**2. 卒業研究との統合**
+**2. カテゴリ数のみを与えた自動生成カテゴリによる検証**
 <div class="box">
 
-   - 卒業研究である「LLMによる教育的ヒント提案」への応用
-   - 誤答の「分類」から「ヒント提案」までを一貫して行うシステムの実装
+- **具体的な間違いカテゴリ**ではなく、**カテゴリ数のみ**を指定
+  → LLMが自動でカテゴリを生成・分類する手法の検討
 </div>
+
+**3. 卒業研究との統合**
+
+<div class="box">
+
+- 誤答の「**分類**」から「**ヒント提案**」までを一貫して行う<br>システム実装による**教育支援の自動化**を実現
+</div>
+
+
+
 
 <!-- - **プロンプトの改良**: より正確な分類のための指示設計
 - **多様な問題での検証**: 異なる難易度・問題タイプでの評価
