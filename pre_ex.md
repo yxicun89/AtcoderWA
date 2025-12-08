@@ -1621,7 +1621,7 @@ for i in range(n):
 
 ## 実験結果：手法2（LLM）- 失敗例
 
-### 問題例：典型90問-問題V
+### 問題例：典型90問-022 Cubic Cake
 
 <div class="box">
 
