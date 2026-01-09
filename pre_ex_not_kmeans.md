@@ -164,6 +164,13 @@ style: |
     margin: 20px 0;
     border-radius: 5px;
   }
+  .box-1 {
+    background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+    border-left: 6px solid #667eea;
+    padding: 4px 25px;
+    margin: 10px 0;
+    border-radius: 5px;
+  }
   .point-box {
     background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
     padding: 4px 25px;
@@ -417,6 +424,13 @@ style: |
     font-size: 0.58em;
     font-family: 'Meiryo', 'メイリオ', sans-serif;
   }
+  .footer-note-small-result-bottom {
+    text-align: center;
+    margin-top: 60px;
+    color: #555;
+    font-size: 0.58em;
+    font-family: 'Meiryo', 'メイリオ', sans-serif;
+  }
   /* フッターノート（小さめ） */
   .footer-note-small {
     text-align: center;
@@ -498,6 +512,11 @@ style: |
   .category-text-2 {
     font-size: 0.9em;
     margin-top: -20px;
+  }
+
+    .category-text-3 {
+    font-size: 1.3em;
+    margin-top: 40px;
   }
 
   /* エラー指数セクション専用 */
@@ -798,15 +817,20 @@ padding: 15px 25px; -->
 
 ---
 
-## 関連研究 : アプローチ
+## 関連研究 : ソースコード分類のアプローチ
 
-既存のソースコードクラスタリングには主に**3つのアプローチ**が存在
+既存のソースコード分類研究には主に**3つのアプローチ**が存在
 
 | ジャンル | アプローチ | 特徴 | 主な課題 |
 |:----:|:---:|:-----|:--------|
 | 静的 | **構造的** | トークン,ASTなど**構文的特徴**を抽出| フォーマット変更に敏感<br>**動作や意味の考慮**が不足|
 | 静的 | **意味的** | 構造ではなく,変数の使用,データの流れ<br>など**コードの中身**に着目 | すべてのデータペアを比較し<br>階層を作成するため**計算量が多い** |
 | 動的 | **動的** | 実行時動作やDeep Learningを活用し,<br>記述形式に依存せず**動作で分類** | 大量データと前処理が必要で<br>**労力が高い** |
+
+<div class="box">
+
+**本研究**では誤りの種類により**CFG・DFGに特有の構造的特徴が現れる**と期待し,<br>**構造的+意味的アプローチ**を採用
+</div>
 
 ---
 
@@ -1457,8 +1481,145 @@ $\text{Recall} \quad \ = \text{正解数} / \text{正解データの総数}$ （
 
 </div>
 
+<!-- 
+このコードの間違いを教えてください。
+最後に以下のカテゴリのどれに当たるか数字のみ出力してください。
+間違いの説明とカテゴリの出力のみ出力してください。
+
+イルミネーションがH*W個のLEDで構成されている
+2*2の領域で2つ以上点灯していたらアウト
+LEDの最大点灯個数を求める
+
+1.探索し点灯個数をカウント
+2.考慮漏れによる間違い -->
+
 ---
-## 考察：手法1（Asanas Cluster）
+## 考察：手法1（Asanas Cluster）- 成功例
+
+### 問題例：典型90問- 033 Not Too Bright
+
+<div class="box">
+
+**問題文**
+イルミネーションがH*W個のLEDで構成されている。
+2*2の領域で2つ以上点灯してはいけない。
+LEDの最大点灯個数を求める問題。
+
+</div>
+
+
+### 間違いのカテゴリ
+<!-- 
+- **探索し点灯個数をカウント**
+- **考慮漏れによる間違い** -->
+
+<div class="grid-2col">
+
+<div class = "category-text-3">
+
+- **探索し点灯個数をカウント**
+
+</div>
+
+<div class="category-text-3">
+
+- **考慮漏れによる間違い**
+</div>
+
+</div>
+
+<div class="footer-note-small-result-bottom">
+[3] 競プロ典型90問 , “010 - Score Sum Queries”, “https://atcoder.jp/contests/typical90/tasks/typical90_ag"
+</div>
+
+---
+
+## 考察：手法1（Asanas Cluster）- 成功例
+
+<div class="grid-2col">
+
+<div>
+
+
+**PCA可視化：クラスタリング前**
+
+![big cfg](ag_before.jpg)
+
+</div>
+
+<div>
+
+**PCA可視化：クラスタリング後**
+
+![large cfg](ag_after.jpg)
+
+</div>
+
+</div>
+
+<div class = "box-1">
+
+<div class="grad">
+
+- クラスタごとの色分布がはっきり分かれており、**各クラスタが明確に可視化されている状態**
+
+</div>
+
+</div>
+
+---
+
+## 考察：手法1（Asanas Cluster）- 成功例
+
+### うまくいった具体例：アプローチが異なり構造も異なる誤答
+
+<div class="grid-2col">
+
+<div class="success-box-yellow">
+
+**誤答A**
+```python
+def notTooBright(H: int, W: int) -> int:
+    dp = [[False] * (W + 1) for _ in range(H + 1)]
+    total = 0
+    for r in range(1, H + 1):
+        for c in range(1, W + 1):
+            if not dp[r - 1][c - 1] and not dp[r - 1][c] and not dp[r][c - 1]:
+                dp[r][c] = True
+                total += 1
+    return total
+```
+→ **探索し点灯個数をカウント**
+
+</div>
+
+<div class="success-box-teal">
+
+**誤答B**
+```python
+h, w = map(int, input().split())
+
+print(((h+1)//2) * ((w+1)//2))
+```
+→ **考慮漏れによる間違い**
+
+</div>
+
+</div>
+
+<div class = "box">
+
+<div class = "grad">
+
+どちらも「点灯数を計算」という**同じ目的**を持つが,**アプローチが全く異なる**ため<br>構造も大きく異なり,構造的特徴によって**適切に分類することができた**
+
+</div>
+
+</div>
+
+
+---
+## 考察：手法1（Asanas Cluster）- 失敗例
 
 ### 問題例：典型90問- 010 Score Sum Queries
 
@@ -1499,7 +1660,7 @@ N人の生徒が2クラスに分かれており、学籍番号i番のクラスCi
 
 ---
 
-## 考察：手法1（Asanas Cluster）
+## 考察：手法1（Asanas Cluster）  - 失敗例
 
 <div class="grid-2col">
 
@@ -1530,7 +1691,7 @@ N人の生徒が2クラスに分かれており、学籍番号i番のクラスCi
 
 ---
 
-## 考察：手法1（Asanas Cluster）
+## 考察：手法1（Asanas Cluster） - 失敗例
 
 <!-- ### なぜうまくいかなかったのか
 
@@ -1684,7 +1845,7 @@ for i in range(n):
 
 </div>
 
-<div class = "box">
+<div class = "box-1">
 
 <div class = "grad">
 
