@@ -1,0 +1,198 @@
+\documentclass[a4j, 12pt, dvipdfmx]{jsbook}
+
+\usepackage[dvipdfmx]{graphicx}
+%\usepackage[dvipdfmx]{hyperref}
+\usepackage{cite}
+\usepackage[dvipdfmx]{color}
+\usepackage{url}
+\usepackage{here}
+\usepackage{ascmac}
+\usepackage{fancybox}
+\usepackage{listings}
+\usepackage{multirow}
+\usepackage{color}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{amsmath}
+\usepackage{subcaption}
+\usepackage{longtable}
+\usepackage{tcolorbox}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{subfig}
+\definecolor{darkgray}{rgb}{.4,.4,.4}
+\definecolor{purple}{rgb}{0.65, 0.12, 0.82}
+	
+\lstdefinelanguage{has}{
+  language=Python,
+  breaklines = true,
+  basicstyle=\footnotesize\ttfamily,
+  commentstyle={\textmc},
+  keywordstyle=\color{black}\bfseries,
+  showstringspaces=false,
+  frame=tblr,
+  numbers=left,
+  stepnumber=1,
+  numberstyle=\tiny,
+  tabsize=2,
+  stringstyle=\color{black}
+}
+
+
+%% \lstdefinelanguage{JavaScript}{
+%%   keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
+%%   keywordstyle=\color{blue}\bfseries,
+%%   ndkeywords={class, export, boolean, throw, implements, import, this},
+%%   ndkeywordstyle=\color{darkgray}\bfseries,
+%%   identifierstyle=\color{black},
+%%   sensitive=false,
+%%   comment=[l]{//},
+%%   morecomment=[s]{/*}{*/},
+%%   commentstyle=\color{purple}\ttfamily,
+%%   stringstyle=\color{red}\ttfamily,
+%%   morestring=[b]',
+%%   morestring=[b]"
+%% }
+
+\lstdefinelanguage{JavaScript}{
+  keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
+  keywordstyle=\bfseries,
+  ndkeywords={class, export, boolean, throw, implements, import, this},
+  ndkeywordstyle=\bfseries,
+  sensitive=false,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\ttfamily,
+  stringstyle=\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
+
+\lstset{
+   language=JavaScript,
+%%   backgroundcolor=\color{lightgray},
+   extendedchars=true,
+   basicstyle=\footnotesize\ttfamily,
+   showstringspaces=false,
+   showspaces=false,
+   numbers=left,
+   numberstyle=\footnotesize,
+   numbersep=9pt,
+   tabsize=2,
+   breaklines=true,
+   showtabs=false,
+   captionpos=t,
+   frame=single,
+   texcl
+}
+	
+\makeatletter
+\def\Hline{
+  \noalign{\ifnum0=`}\fi\hrule \@height 4.\arrayrulewidth \futurelet
+  \reserved@a\@xhline}
+\makeatother
+\renewcommand{\lstlistingname}{リスト}
+\renewcommand{\ttdefault}{pcr}
+
+% \title{令和3年度 卒業論文\\題目「関数型プログラミング言語に対する\\型推論系に関する研究」}
+% \author{情報科学部 メディア・ロボティクスコース\\ 2018311090 山田 桃香\\ 山本研究室}
+% \date{}
+
+\title{令和8年度 修士論文\\プログラミング演習における誤答分類のための\\構造的アプローチと意味的アプローチの比較評価}
+\author{情報科学研究科 情報システム専攻\\ 2024831008 西村 優基\\ 山本研究室}
+\date{}
+
+\begin{document}
+%\maketitle
+
+\begin{titlepage}
+\begin{centering}
+
+\vspace*{3cm}
+{\LARGE 令和8年度 修士論文}\\
+\vspace*{1cm}
+% {\LARGE 題目「関数型プログラミング言語に対する\\型推論系に関する研究」}\\
+{\LARGE プログラミング演習における誤答分類のための\\構造的アプローチと意味的アプローチの比較評価}\\
+\vspace*{6cm}
+
+{\large 愛知県立大学大学院\\
+情報科学研究科 情報システム専攻\\
+2024831008 西村 優基\\
+山本研究室}
+
+\end{centering}
+\end{titlepage}
+
+\tableofcontents
+
+\input{introduction.tex}
+
+\input{prev.tex}
+
+\input{python.tex}
+
+\input{experiment.tex}
+
+\input{evaluation.tex}
+
+\input{conclusion.tex}
+
+\chapter*{謝辞}
+本研究を行うにあたり，熱心にご指導頂いた山本晋一郎教授，大久保弘崇講師，粕谷英人講師に深く感謝致します．さらに，本研究に多大なご協力を頂いた山本研究室，大久保研究室，粕谷研究室の皆様に深く感謝致します．
+
+\begin{thebibliography}{9}
+  \bibitem{Asanas Cluster}Paiva, J.C., Leal, J.P., and Figueira, Á., Clustering source code from automated assessment of programming assignments. International Journal of Data Science and Analytics,  Volume 20, pages 1581–1592, (2025)
+  
+  \bibitem{fujiwara2022}藤原 裕士 “深層学習を用いたソースコード分類に関する研究”. \url{https://sel.ist.osaka-u.ac.jp/lab-db/Dthesis/archive/40/40.pdf}, (2022)%{\today}"閲覧"
+
+  \bibitem{openai_structured_2024} OpenAI, ``Introducing Structured Outputs in the API,'' 2024. \url{https://openai.com/index/introducing-structured-outputs-in-the-api/} \today 閲覧.
+
+  \bibitem{vellum_2025} Anita Kirkovska, ``Claude 3.5 Sonnet vs GPT-4o: Comprehensive Comparison,'' Vellum.ai, 2025. \url{https://www.vellum.ai/blog/claude-3-5-sonnet-vs-gpt4o} \today 閲覧.
+
+  \bibitem{sentisight_2025} Alius Noreika, ``Claude 3.5 Sonnet vs. GPT-4o: The Ultimate Comparison,'' SentiSight.ai, 2025. \url{https://www.sentisight.ai/claude-3-5-sonnet-vs-gpt-4o-ultimate-comparison/} \today 閲覧.
+
+% コンテストトップページ
+  \bibitem{typical90_top} AtCoder. ``競プロ典型 90 問''. \url{https://atcoder.jp/contests/typical90/} (\today 閲覧).
+
+  % 問004 -> d
+  \bibitem{typical90_d} AtCoder. ``004 - Cross Sum''. \url{https://atcoder.jp/contests/typical90/tasks/typical90_d} (\today 閲覧).
+
+  % 問010 -> j
+  \bibitem{typical90_j} AtCoder. ``010 - Score Sum Queries''. \url{https://atcoder.jp/contests/typical90/tasks/typical90_j} (\today 閲覧).
+
+  % 問022 -> v
+  \bibitem{typical90_v} AtCoder. ``022 - Cubic Cake''. \url{https://atcoder.jp/contests/typical90/tasks/typical90_v} (\today 閲覧).
+
+  % 問024 -> x
+  \bibitem{typical90_x} AtCoder. ``024 - Select +/- One''. \url{https://atcoder.jp/contests/typical90/tasks/typical90_x} (\today 閲覧).
+
+  % 問027 -> aa
+  \bibitem{typical90_aa} AtCoder. ``027 - Sign Up Requests''. \url{https://atcoder.jp/contests/typical90/tasks/typical90_aa} (\today 閲覧).
+
+  % 問033 -> ag
+  \bibitem{typical90_ag} AtCoder. ``033 - Not Too Bright''. \url{https://atcoder.jp/contests/typical90/tasks/typical90_ag} (\today 閲覧).
+
+  % 問055 -> bc
+  \bibitem{typical90_bc} AtCoder. ``055 - Select 5''. \url{https://atcoder.jp/contests/typical90/tasks/typical90_bc} (\today 閲覧).
+  
+  % 問061 -> bi
+  \bibitem{typical90_bi} AtCoder. ``061 - Deck''. \url{https://atcoder.jp/contests/typical90/tasks/typical90_bi} (\today 閲覧).
+
+  % 問067 -> bo
+  \bibitem{typical90_bo} AtCoder. ``067 - Base 8 to 9''. \url{https://atcoder.jp/contests/typical90/tasks/typical90_bo} (\today 閲覧).
+
+  % 問078 -> bz
+  \bibitem{typical90_bz} AtCoder. ``078 - Easy Graph Problem''. \url{https://atcoder.jp/contests/typical90/tasks/typical90_bz} (\today 閲覧).
+
+\end{thebibliography}
+
+% \appendix
+% 付録
+
+% \chapter{xxxのソースコード}
+% \lstinputlisting[caption=xxx.ts, label=src]{ファイルパス}
+
+% \chapter{xxxソースコード}
+% \lstinputlisting[caption=xxx.ts]{ファイルパス}
+
+\end{document}
