@@ -1521,8 +1521,8 @@ LEDの最大点灯個数を求める
 <div class="box">
 
 **問題文**
-イルミネーションがH*W個のLEDで構成されている。
-2*2の領域で2つ以上点灯してはいけない。
+イルミネーションがH* W個のLEDで構成されている。
+2* 2の領域で2つ以上点灯してはいけない。
 LEDの最大点灯個数を求める問題。[4]
 
 </div>
@@ -1549,7 +1549,7 @@ LEDの最大点灯個数を求める問題。[4]
 </div>
 
 <div class="footer-note-small-result-bottom">
-[4] 競プロ典型90問 , “010 - Score Sum Queries”, “https://atcoder.jp/contests/typical90/tasks/typical90_ag"
+[4] 競プロ典型90問 , “033 Not Too Bright”, “https://atcoder.jp/contests/typical90/tasks/typical90_ag"
 </div>
 
 ---
